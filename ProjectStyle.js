@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Add task to the pre-set transition set
 function addTask() {
     let labelValues = ["Right Rotation", "Left Rotation", "Zoom in", "Zoom out", "Bouncing top right", "Bouncing bottom left", "Bouncing top left", "Bouncing bottom right"];
-    let trueLabel = ["RotationR", "RotationL", "ZoomIn", "ZoomOut", "BouncingTR", "BouncingBL", "BouncingTL", "BouncingBR"]
+    let trueLabel = ["RotationR", "RotationL", "ZoomIn", "ZoomOut", "BouncingTR", "BouncingBL", "BouncingTL", "BouncingBR"];
     let taskList = document.getElementsByClassName("transition-list")[0];
 
     let divBox = document.createElement("div");
@@ -145,16 +145,25 @@ function addTask() {
     let chosenBox = document.createElement("div");
     chosenBox.className = "transition-choice";
 
+    // Hide/Show button
+    let hide_show = document.createElement("span");
+    hide_show.className = "hide-show-text";
+    hide_show.textContent = "Hide";
+    hide_show.style.userSelect = "none";
+
+    // Delete button
+    let deleteBtn = document.createElement("span");
+    deleteBtn.className = "delete-text";
+    deleteBtn.textContent = "Delete";
+    deleteBtn.style.userSelect = "none";
+    deleteBtn.style.marginLeft = "10px";
+    deleteBtn.style.color = "red";
+    deleteBtn.style.cursor = "pointer";
+
+    // Create checkboxes container
     let choice = document.createElement("div");
     choice.className = "addTask-button";
 
-    // Create clickable text
-    let hide_show = document.createElement("span");
-    hide_show.className = "hide-show-text";
-    hide_show.textContent = "Hide";             // This is your clickable text
-    hide_show.style.userSelect = "none";        // Prevent text selection
-
-    // Create checkboxes
     for (let i = 0; i < labelValues.length; i++) {
         let label = document.createElement("label");
         let input = document.createElement("input");
@@ -165,13 +174,15 @@ function addTask() {
         choice.appendChild(label);
     }
 
+    // Append elements
     divBox.appendChild(chosenBox);
     divBox.appendChild(hide_show);
+    divBox.appendChild(deleteBtn);
     divBox.appendChild(choice);
     taskList.appendChild(divBox);
 }
 
-// Toggle visibility of checkboxes when clicked (for preset transition de hide and show text)
+// Toggle visibility of checkboxes when clicked
 document.addEventListener("click", function (event) {
     if (event.target.classList.contains("hide-show-text")) {
 
@@ -186,5 +197,10 @@ document.addEventListener("click", function (event) {
             choice.style.display = "none";
             hide_show.textContent = "Show";
         }
+    }
+    // delete the preset transition box when click the delete text
+    if (event.target.classList.contains("delete-text")) {
+        let divBox = event.target.closest(".preset-transition");
+        divBox.remove();
     }
 });

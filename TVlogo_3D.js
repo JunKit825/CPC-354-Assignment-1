@@ -682,6 +682,18 @@ function disableUI() {
   document.querySelectorAll('.addTask-button input[type="checkbox"]').forEach(cb => cb.disabled = true);
 
   document.querySelectorAll('.delete-btn').forEach(btn => btn.disabled = true);
+
+  document.querySelectorAll('.delete-text, .hide-show-text').forEach(el => { 
+    el.classList.add("disabled"); 
+    el.style.pointerEvents = "none"; 
+    el.style.opacity = "0.5";
+  });
+
+  document.querySelectorAll('.preset-transition').forEach(box => {
+    box.style.pointerEvents = "none";  
+    box.style.cursor = "not-allowed";   
+    box.style.opacity = "0.5";          
+  });
 }
 
 // enable all UI elements when the animation is pause or stop
@@ -704,6 +716,18 @@ function enableUI() {
   document.querySelectorAll('.addTask-button input[type="checkbox"]').forEach(cb => cb.disabled = false);
 
   document.querySelectorAll('.delete-btn').forEach(btn => btn.disabled = false);
+
+  document.querySelectorAll('.delete-text, .hide-show-text').forEach(el => {
+    el.classList.remove("disabled");
+    el.style.pointerEvents = "auto";
+    el.style.opacity = "1";
+  });
+
+  document.querySelectorAll('.preset-transition').forEach(box => {
+    box.style.pointerEvents = "auto";
+    box.style.cursor = "pointer";
+    box.style.opacity = "1";
+  });
 }
 
 // Reset all necessary variables to their default values
