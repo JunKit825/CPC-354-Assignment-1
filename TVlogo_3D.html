@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>3D TV Logo Animation</title>
+
+	<!-- Link CSS, JS, and WebGL -->
+	<!-- webgl-utils.js	: standard utilities from Google to set up a WebGL context -->
+	<!-- initShaders.js	: contains helper functions to compile and link WebGL shaders to the application -->
+	<!-- MV.js			: provides matrix and vector manipulation functions APIs for WebGL -->
+	<!-- DemoJS.js		: your JS file -->
+	<!-- DemoCSS.css	: your CSS file -->
+	<script type="text/javascript" src="Common/webgl-utils.js"></script>
+	<script type="text/javascript" src="Common/initShaders.js"></script>
+	<script type="text/javascript" src="Common/MV.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/gh/frenchtoast747/webgl-obj-loader@master/dist/webgl-obj-loader.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="ProjectStyle.css">
+
+	<script src="https://cdn.jsdelivr.net/npm/opentype.js@latest/dist/opentype.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/earcut@2.2.4/dist/earcut.min.js"></script>
+
+	<!-- Define the vertex shader -->
+	<script id="vertex-shader" type="x-shader/x-vertex">
+		// Declare the global variable(s) for draw calls
+		uniform mat4 projectionMatrix;
+		uniform mat4 modelViewMatrix;
+		
+		// Declare the input variable(s) to receive per-vertex data from the application
+		attribute vec4 vPosition;
+		attribute vec4 vColor;
+		
+		// Declare the varying variable(s) to pass data to the fragment shader
+		varying vec4 fColor;
+
+		void main()
+		{
+			gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+			fColor = vColor;
+		}
+	</script>
+
+	<!-- Define the fragment shader -->
+	<script id="fragment-shader" type="x-shader/x-fragment">
+		precision mediump float;
+		varying vec4 fColor;
+
+		void main()
+		{
+			gl_FragColor = fColor;
+		}
+	</script>
+</head>
+
+<body>
+
+	<!-- Canvas for the graphic rendering -->
+	<div class="canvas">
+		<canvas id="gl-canvas">
+			Error: your browser doesn't support the HTML5 canvas element
+		</canvas>
+	</div>
+
+	<!-- Added to solve load logo problem -->
+	<div style="position: absolute; top: 10px; left: 10px; color: white;">
+    <input type="text" id="userText" value="YSQD" maxlength="4"/>
+    <button onclick="loadLogo(); resetAndRecompute();">Generate 3D Logo</button>
+	</div>
+
+	<!-- Div for the side edit plane -->
+  <div class="operation-plane">
+
+		<!-- Div for half top of the operation -->
+    <div>
+
+			<!-- Div for adding pre-set transition -->
+			<div class="transition-list">
+				<button class="add-transition-button" onclick="addTask()">Add transition set</button>
+				<button id="selected-transition">Get Selected Value</button>
+				<!-- Some div will be dynamically add here, for the preset transition -->
+			</div>
+
+			<!-- Div for iteration slider -->
+			<div class="iteration-slider-container">
+				<input class="iteration-slider-class" id="iteration-slider" type="range" min="1" max="5" step="1" value="1" />
+				<p>Value: <span id="iteration-value"></span></p>
+			</div>
+
+			<!-- Div for depth slider -->
+			<div class="depth-slider-container">
+				<input class="depth-slider-class" id="depth-slider" type="range" min="1" max="5" step="1" value="1" />
+				<p>Depth: <span id="depth-value"></span></p>
+			</div>
+
+			<!-- Div for speed slider -->
+			<div class="speed-slider-container">
+				<input class="speed-slider-class" id="speed-slider" type="range" min="1" max="5" step="1" value="1" />
+				<p>Speed: <span id="speed-value"></span></p>
+			</div>
+
+			<!-- Div for color picker -->
+			<div>
+				<label for="color-picker">Color:</label>
+				<input type="color" value="#ff0000" id="color-picker" onchange="getColor(event)"/>
+				<ul id="color-list"></ul>
+			</div>
+
+      <!-- Animation start & restart button, can add div wrap over here for tyling purpose -->
+      <input id="start-btn" class="anim-btn" type="button" value="Start/Pause">
+      <input id="restart-btn" class="anim-btn" type="button" value="Restart">
+    </div>
+
+		<!-- Div to control run what operation -->
+    <div class="dropdown">
+			<button onclick="toggleDropdown()">Select Options</button>
+			<div id="options" class="dropdown-content">
+					<label><input type="checkbox" value="RotationR"> Right Rotation</label>
+					<label><input type="checkbox" value="RotationL"> Left Rotation</label>
+					<label><input type="checkbox" value="ZoomIn"> Zoom in</label>
+					<label><input type="checkbox" value="ZoomOut"> Zoom out</label>
+					<label><input type="checkbox" value="BouncingTR"> Bouncing top right</label>
+					<label><input type="checkbox" value="BouncingBL"> Bouncing bottom left</label>
+					<label><input type="checkbox" value="BouncingTL"> Bouncing top left</label>
+					<label><input type="checkbox" value="BouncingBR"> Bouncing bottom right</label>
+			</div>
+		</div>
+
+		<!-- Div to show the chosen operation -->
+    <div id="selected-op" class="selected-items"></div>
+  </div>
+
+	<!-- This need to include here as the loading should be slower than the html above, change will baozha -->
+  <script src="ProjectStyle.js"></script>
+  <script src="TVlogo_3D.js"></script>
+</body>
+
+</html>
+

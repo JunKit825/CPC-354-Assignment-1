@@ -1,0 +1,326 @@
+/* First section here is fro yewken de */
+
+body
+{
+	width: 100vw;
+	height: 100vh;
+	padding: 0;
+	margin: 0;
+	text-decoration: none;
+    display: flex;
+	flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.canvas
+{
+	border: 10px solid #4a4e69;
+	border-radius: 10px;
+}
+
+.horizontal-align
+{
+	display: flex;
+	flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.vertical-align
+{
+	display: flex;
+	flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.panel
+{
+	margin-left: 10px;
+	width: 400px;
+	height: 720px;
+	border: 10px solid #4a4e69;
+	border-radius: 10px;
+	background-color: #022639;
+}
+
+.param-panel
+{
+	width: 270px;
+	margin: 5px 0 5px 0;
+}
+
+.mg-top-bottom
+{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+
+.checkText
+{
+	width: 150px;
+	height: 20px;
+	font-weight: bold;
+	font-size: large;
+	color: #ffffff;
+}
+
+.checkRadio
+{
+	width: 20px;
+	height: 20px;
+	margin-right: 22px;
+}
+
+.textbox
+{
+	margin-left: 15px;
+	width: 55px;
+	height: 55px;
+	background: #0077b6;
+	border: 5px solid #00b4d8;
+	border-radius: 10px;
+}
+
+.textbox2
+{
+	margin-left: 15px;
+	width: 55px;
+	height: 40px;
+	background: #0077b6;
+	border: 5px solid #00b4d8;
+	border-radius: 10px;
+}
+
+.textbox p
+{
+	position: relative;
+	color: #ffffff;
+	text-align: center;
+	font-weight: bold;
+	font-size: 25px;
+	line-height: 0.25;
+}
+
+.textbox2 p
+{
+	position: relative;
+	color: #ffffff;
+	text-align: center;
+	font-weight: bold;
+	font-size: 20px;
+	line-height: 0.1;
+}
+
+.anim-btn
+{
+	margin: 15px 0px 5px 0px;
+	width: 270px;
+	height: 70px;
+	background: #34a0a4;
+	border: 5px solid #99d98c;
+	border-radius: 10px;
+	color: #ffffff;
+	text-align: center;
+	font-weight: bold;
+	font-size: 24px;
+	outline : none;
+}
+
+.anim-btn:hover
+{
+	animation: bounce 1s;
+}
+
+.anim-btn:active
+{
+  background-color 	: #21ff94;
+  box-shadow 		: 0 2px #666666;
+  transform 		: translateY(2px);
+}
+
+.anim-btn:disabled
+{
+    animation: none;
+	pointer-events: none;
+	opacity: 0.5;
+}
+
+@keyframes bounce 
+{
+	0%, 20%, 60%, 100%	{transform: translateY(0);}
+	40% 				{transform: translateY(-10px);}
+	80% 				{transform: translateY(-5px);}
+}
+
+/* Below is the select current animation/operation de*/
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 120px;
+    overflow-y: auto;
+    max-height: 100px;
+    border: 1px solid #ddd;
+    z-index: 1;
+}
+.dropdown-content label {
+    display: block;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.dropdown-content label:hover {
+    background-color: #ddd;
+}
+/*.show {
+    display: block;
+}*/
+
+.dropdown-content.show {
+	display: block;
+}
+.selected-items {
+    width:100px;
+    margin-top: 5px;
+    padding: 5px;
+    border: 1px solid #ccc;
+}
+.selected-items div {
+    margin-bottom: 5px;
+}
+
+.operation-plane {
+  display: flex;           /* use flexbox */
+  flex-direction: column;  /* stack children vertically */
+  align-items: flex-start; /* optional: left-align items */
+  gap: 10px;               /* optional: space between items */
+}
+
+/* This is for the preset transition */
+
+.transition-choice {
+    width:100px;
+    margin-top: 5px;
+    padding: 5px;
+    
+}
+
+.transition-choice.selected {
+	border: 2px solid blue;
+}
+
+.transition-choice button label{
+	display: block;
+}
+
+.preset-transition {
+    position: relative;
+    padding: 5px;
+}
+
+.transition-choice {
+    width: 100%;
+    height: 100%;
+    display: block; /* or inline-block depending on layout */
+    cursor: pointer;
+		border: 1px solid #ccc;
+}
+
+.hide-show-text {
+	color: rgb(137, 134, 138);
+	cursor: pointer;
+}
+
+.hide-show-text:hover {
+	color: blue;
+	text-decoration: underline;
+}
+
+/* Below is iteration slider css */
+
+.iteration-slider-container {
+  width: 100%;
+}
+
+.iteration-slider-class {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 15px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.iteration-slider-class:hover {
+  opacity: 1;
+}
+
+.iteration-slider-class::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #04AA6D;
+  cursor: pointer;
+}
+
+.iteration-slider-class::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #04AA6D;
+  cursor: pointer;
+}
+
+/* Below is depth slider design */
+
+.depth-slider-container {
+  width: 100%;
+}
+
+.depth-slider-class {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 15px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.depth-slider-class:hover {
+  opacity: 1;
+}
+
+.depth-slider-class::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #04AA6D;
+  cursor: pointer;
+}
+
+.depth-slider-class::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #04AA6D;
+  cursor: pointer;
+}
+
