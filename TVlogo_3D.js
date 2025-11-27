@@ -115,8 +115,6 @@ function resetAndRecompute() {
   recompute();
 
   animReset = false;
-
-  if (animFlag) animUpdate();  // restart animation if it is running
 }
 
 // Retrieve all elements from HTML and store in the corresponding variables, onclick thing will put here, although not sure why
@@ -675,6 +673,9 @@ function disableUI() {
 
   document.getElementById("color-picker").disabled = true;
 
+  document.getElementById("userText").disabled = true;
+  document.getElementById("generate-btn").disabled = true;
+
   document.querySelector(".dropdown > button").disabled = true;
 
   document.querySelectorAll('#options input[type="checkbox"]').forEach(cb => cb.disabled = true);
@@ -708,6 +709,9 @@ function enableUI() {
   document.getElementById("speed-slider").disabled = false;
 
   document.getElementById("color-picker").disabled = false;
+
+  document.getElementById("userText").disabled = false;
+  document.getElementById("generate-btn").disabled = false;
 
   document.querySelector(".dropdown > button").disabled = false;
 
