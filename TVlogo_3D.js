@@ -91,9 +91,9 @@ function onWindowResize() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   modelViewMatrix = mat4();
   modelViewMatrix = mult(modelViewMatrix, translate(0, -0.2357, 0));
-  modelViewMatrix = mult(modelViewMatrix, rotateY(theta[2]));
+  modelViewMatrix = mult(modelViewMatrix, translate(move[0], move[1], move[2])); // translation will perform first because if we perform scale first, it will affect the transition distance and end up will let the object out of the canvas
   modelViewMatrix = mult(modelViewMatrix, scale(scaleNum, scaleNum, 1));
-  modelViewMatrix = mult(modelViewMatrix, translate(move[0], move[1], move[2]));
+  modelViewMatrix = mult(modelViewMatrix, rotateY(theta[2]));
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
   gl.drawArrays(gl.TRIANGLES, 0, points.length);
 }
