@@ -125,11 +125,22 @@ function getUIElement() {
   // set default transitions
   const defaultTransitions = ["RotationR", "RotationL", "ZoomIn"];
 
-  // initialize dropdown checkboxes with default transitions
+  // Get all checkboxes
   document.querySelectorAll('.dropdown-content input[type="checkbox"]').forEach(box => {
+    
     // If the checkbox value is in defaults, check it visually
     if (defaultTransitions.includes(box.value)) {
       box.checked = true;
+    }
+
+    // Add to selected-op if checked initially
+    if (box.checked) {
+      const selectedDiv = document.getElementById("selected-op");
+      // create a div for each checked operation
+      const div = document.createElement("div");
+      div.setAttribute("data-value", box.value);
+      div.innerText = box.value;
+      selectedDiv.appendChild(div);
     }
 
     // a listener for each checkbox to update selected operation
