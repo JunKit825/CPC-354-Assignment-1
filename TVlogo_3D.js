@@ -83,10 +83,6 @@ function onWindowResize() {
   // update the WebGL viewport so that it matches the new canvas size
   gl.viewport(0, 0, canvas.width, canvas.height);
 
-  // recalculate the projection matrix with the new canvas ratio
-  projectionMatrix = ortho(-4, 4, -2.25, 2.25, 2, -2);
-  gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
-
   // render current frame again to adjust it so that it fits the new canvas size
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   modelViewMatrix = mat4();
