@@ -125,9 +125,9 @@ function getUIElement() {
   // set default transitions
   const defaultTransitions = ["RotationR", "RotationL", "ZoomIn"];
 
-  // Get all checkboxes
+  // initialize dropdown checkboxes with default transitions
   document.querySelectorAll('.dropdown-content input[type="checkbox"]').forEach(box => {
-    
+
     // If the checkbox value is in defaults, check it visually
     if (defaultTransitions.includes(box.value)) {
       box.checked = true;
@@ -165,17 +165,6 @@ function getUIElement() {
       resetAndRecompute();
     });
   });
-
-  // On page load, populate selectedOperation with default checked items
-  const selectedDiv = document.getElementById("selected-op");
-  selectedDiv.innerHTML = ""; // clear any previous content
-  document.querySelectorAll('.dropdown-content input[type="checkbox"]:checked').forEach(box => {
-    const div = document.createElement("div");
-    div.setAttribute("data-value", box.value);
-    div.innerText = box.value;
-    selectedDiv.appendChild(div);
-  });
-
 
   // Activate when click on the start button
   startBtn.onclick = function () {
