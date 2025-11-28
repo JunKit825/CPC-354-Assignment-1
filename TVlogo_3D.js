@@ -652,6 +652,9 @@ function animUpdate() {
 
 // disable all UI elements when the animation is on going
 function disableUI() {
+  document.querySelector(".add-transition-button").classList.add("disabled");
+  document.getElementById("selected-transition").classList.add("disabled");
+  document.getElementById("generate-btn").classList.add("disabled");
 
   document.getElementById("restart-btn").disabled = true;
   document.querySelector(".add-transition-button").disabled = true;
@@ -689,6 +692,9 @@ function disableUI() {
 
 // enable all UI elements when the animation is pause or stop
 function enableUI() {
+  document.querySelector(".add-transition-button").classList.remove("disabled");
+  document.getElementById("selected-transition").classList.remove("disabled");
+  document.getElementById("generate-btn").classList.remove("disabled");
 
   document.getElementById("restart-btn").disabled = false;
   document.querySelector(".add-transition-button").disabled = false;

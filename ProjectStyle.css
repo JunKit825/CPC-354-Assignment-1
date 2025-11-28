@@ -24,102 +24,6 @@ body
   font-style: normal;
 }
 
-/* 
-.horizontal-align
-{
-	display: flex;
-	flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.vertical-align
-{
-	display: flex;
-	flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.panel
-{
-	margin-left: 0.52vw;
-	width: 20.83vw;
-	height: 66.67vh;
-	border: 0.52vw solid #4a4e69;
-	border-radius: 0.52vw;
-	background-color: #022639;
-}
-
-.param-panel
-{
-	width: 14.06vw;
-	margin: 0.46vh 0 0.46vh 0;
-}
-
-.mg-top-bottom
-{
-	margin-top: 0.93vh;
-	margin-bottom: 0.93vh;
-}
-
-
-.checkText
-{
-	width: 7.81vw;
-	height: 1.85vh;
-	font-weight: bold;
-	font-size: large;
-	color: #ffffff;
-}
-
-.checkRadio
-{
-	width: 1.04vw;
-	height: 1.85vh;
-	margin-right: 1.15vw;
-}
-
-.textbox
-{
-	margin-left: 0.78vw;
-	width: 2.86vw;
-	height: 5.09vh;
-	background: #0077b6;
-	border: 0.26vw solid #00b4d8;
-	border-radius: 0.52vw;
-}
-
-.textbox2
-{
-	margin-left: 0.78vw;
-	width: 2.86vw;
-	height: 3.70vh;
-	background: #0077b6;
-	border: 0.26vw solid #00b4d8;
-	border-radius: 0.52vw;
-}
-
-.textbox p
-{
-	position: relative;
-	color: #ffffff;
-	text-align: center;
-	font-weight: bold;
-	font-size: 1.30vw;
-	line-height: 0.25;
-}
-
-.textbox2 p
-{
-	position: relative;
-	color: #ffffff;
-	text-align: center;
-	font-weight: bold;
-	font-size: 1.04vw;
-	line-height: 0.1;
-} */
-
 .anim-btn
 {
 	margin: 1.39vh 0 0.46vh 0;
@@ -204,6 +108,12 @@ body
 	font-weight: bold;
 	font-size: 1.2vw;
   color: #000000;
+}
+
+#generate-btn.disabled {
+  transform: none !important;
+  background-color: #ffcb3e !important;
+  pointer-events: none !important;
 }
 
 #generate-btn:hover {
@@ -331,13 +241,19 @@ body
   color: #000000;
 }
 
+.add-transition-button.disabled,
+#selected-transition.disabled {
+  transform: none !important;
+  background-color: #ffcb3e !important;
+  pointer-events: none !important;
+}
+
 .add-transition-button:hover, #selected-transition:hover {
   transform: scale(1.1);
   background-color: #ffbb00;
 }
 
-.addTask-button:hover {
-}
+
 
 /* Below is iteration slider css */
 
