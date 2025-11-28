@@ -2,6 +2,9 @@
 <html lang="en">
 
 <head>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=WDXL+Lubrifont+SC&display=swap" rel="stylesheet">
 	<meta charset="utf-8">
 	<title>3D TV Logo Animation</title>
 
@@ -64,9 +67,9 @@
 	</div>
 
 	<!-- Added to solve load logo problem -->
-	<div style="position: absolute; top: 10px; left: 10px; color: white;">
-    <input type="text" id="userText" value="YSQD" maxlength="4"/>
-    <button id="generate-btn" onclick="loadLogo(); resetAndRecompute();">Generate 3D Logo</button>
+	<div class="input-logo">
+    	<input type="text" id="userText" value="YSQD" maxlength="4"/>
+    	<button id="generate-btn" onclick="loadLogo(); resetAndRecompute();">Generate 3D Logo</button>
 	</div>
 
 	<!-- Div for the side edit plane -->
@@ -77,15 +80,17 @@
 
 			<!-- Div for adding pre-set transition -->
 			<div class="transition-list">
-				<button class="add-transition-button" onclick="addTask()">Add transition set</button>
-				<button id="selected-transition">Get Selected Value</button>
+				<div class="transition-button-container">
+					<button class="add-transition-button" onclick="addTask()">Add Transition Set</button>
+					<button id="selected-transition">Get Selected Value</button>
 				<!-- Some div will be dynamically add here, for the preset transition -->
+				 </div>
 			</div>
 
 			<!-- Div for iteration slider -->
 			<div class="iteration-slider-container">
 				<input class="iteration-slider-class" id="iteration-slider" type="range" min="1" max="5" step="1" value="1" />
-				<p>Value: <span id="iteration-value"></span></p>
+				<p>Iteration: <span id="iteration-value"></span></p>
 			</div>
 
 			<!-- Div for depth slider -->
@@ -101,7 +106,7 @@
 			</div>
 
 			<!-- Div for color picker -->
-			<div>
+			<div class="color-picker-container">
 				<label for="color-picker">Color:</label>
 				<input type="color" value="#ff0000" id="color-picker" onchange="getColor(event)"/>
 				<ul id="color-list"></ul>
