@@ -59,17 +59,17 @@
 
 <body>
 	<div class="canva-slider">
+		<!-- Added to solve load logo problem -->
+		<div class="input-logo">
+			<input type="text" id="userText" value="YSQD" maxlength="4"/>
+			<button id="generate-btn" onclick="loadLogo(); resetAndRecompute();">Generate 3D Logo</button>
+		</div>
+		
 		<!-- Canvas for the graphic rendering -->
 		<div class="canvas">
 			<canvas id="gl-canvas">
 				Error: your browser doesn't support the HTML5 canvas element
 			</canvas>
-		</div>
-
-		<!-- Added to solve load logo problem -->
-		<div class="input-logo">
-			<input type="text" id="userText" value="YSQD" maxlength="4"/>
-			<button id="generate-btn" onclick="loadLogo(); resetAndRecompute();">Generate 3D Logo</button>
 		</div>
 
 		<div class="slider-bar">
