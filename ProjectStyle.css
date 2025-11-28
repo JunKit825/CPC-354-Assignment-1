@@ -175,18 +175,17 @@ body
 
 .dropdown {
     position: relative;
+    width: 100%;
     display: inline-block;
 }
 
 .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 6.25vw;
-    overflow-y: auto;
-    max-height: 9.26vh;
-    border: 0.05vw solid #ddd;
-    z-index: 1;
+  display: none;
+  background-color: #f1f1f1;
+  width: 100%;
+  max-height: 12vh;
+  overflow-y: auto;
+  border: 0.05vw solid #ddd;
 }
 .dropdown-content label {
     display: block;
@@ -208,23 +207,16 @@ body
 }
 .selected-items {
     width: 100%;
-    max-height: 12vh;
+    box-sizing: border-box;
     margin-top: 0.46vh;
     padding: 0.46vh 0.52vw;
     border: 0.05vw solid #ccc;
-    overflow-y: auto;
+    flex-shrink: 0;
 }
 .selected-items div {
     margin-bottom: 0.46vh;
     font-size: min(1vw, 0.95rem);
     word-break: break-word;
-}
-
-.operation-plane {
-  display: flex;           /* use flexbox */
-  flex-direction: column;  /* stack children vertically */
-  align-items: flex-start; /* optional: left-align items */
-  gap: 0.52vw;               /* optional: space between items */
 }
 
 /* This is for the preset transition */
@@ -396,3 +388,24 @@ body
   cursor: pointer;
 }
 
+#color-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;              /* space between elements */
+  margin-bottom: 6px;
+  list-style: none;       /* remove bullet point */
+}
+
+.color-box {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #000;
+  border-radius: 3px;
+}
+
+.delete-btn {
+  margin-left: auto;      /* push button to the right */
+  padding: 3px 8px;
+  font-size: 12px;
+  cursor: pointer;
+}

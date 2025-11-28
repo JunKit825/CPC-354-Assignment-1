@@ -805,7 +805,23 @@ function getColor(event) {
 
       let vec = baseColors[i];
       let list = document.createElement("li");
-      list.textContent = colorValue; // show the color value
+
+      // Create color preview box
+      let colorBox = document.createElement("div");
+      colorBox.style.width = "20px";
+      colorBox.style.height = "20px";
+      colorBox.style.display = "inline-block";
+      colorBox.style.marginRight = "10px";
+      colorBox.style.border = "1px solid #000";
+      colorBox.style.backgroundColor = colorValue;
+
+      // Text label
+      let label = document.createElement("span");
+      label.textContent = colorValue;
+
+      // Append UI elements
+      list.appendChild(colorBox);
+      list.appendChild(label);
 
       let button = document.createElement("button");
       button.className = 'delete-btn';
