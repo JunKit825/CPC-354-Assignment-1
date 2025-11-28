@@ -2,13 +2,13 @@
 
 body
 {
-	width: 99vw;
-	height: 100vh;
-	padding: 0;
-	margin: 0;
-	text-decoration: none;
+  width: 100%;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
   display: flex;
-	flex-direction: row;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
 }
@@ -23,8 +23,8 @@ body
 {
 	display: flex;
 	flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .vertical-align
@@ -248,12 +248,15 @@ body
 
 .iteration-slider-container {
   width: 100%;
+  margin-top: 30px;
 }
 
 .iteration-slider-class {
   -webkit-appearance: none;
-  width: 100%;
-  height: 15px;
+  width: 90%;
+  display: block;
+  margin: 0 auto;
+  height: 10px;
   border-radius: 5px;
   background: #d3d3d3;
   outline: none;
@@ -269,17 +272,17 @@ body
 .iteration-slider-class::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
   background: #04AA6D;
   cursor: pointer;
 }
 
 .iteration-slider-class::-moz-range-thumb {
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
   background: #04AA6D;
   cursor: pointer;
 }
@@ -288,12 +291,15 @@ body
 
 .depth-slider-container {
   width: 100%;
+  margin-top: 30px;
 }
 
 .depth-slider-class {
   -webkit-appearance: none;
-  width: 100%;
-  height: 15px;
+  width: 90%;
+  display: block;
+  margin: 0 auto;
+  height: 10px;
   border-radius: 5px;
   background: #d3d3d3;
   outline: none;
@@ -309,17 +315,17 @@ body
 .depth-slider-class::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
   background: #04AA6D;
   cursor: pointer;
 }
 
 .depth-slider-class::-moz-range-thumb {
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
   background: #04AA6D;
   cursor: pointer;
 }
