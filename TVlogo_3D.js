@@ -57,7 +57,7 @@ window.onload = function init() {
   
   canvas = document.getElementById("gl-canvas");
 
-  // set initial canvas to 80% of window size
+  // scale canvas width to 60% of window width and maintain 16:9 canvas ratio
   canvas.width = window.innerWidth * 0.6;
   canvas.height = canvas.width * 9 / 16; 
   
@@ -76,7 +76,7 @@ window.onload = function init() {
 
 // function will be called whenever there is a window resize
 function onWindowResize() {
-  // scale canvas width to 80% of window width and maintain 16:9 canvas ratio
+  // scale canvas width to 60% of window width and maintain 16:9 canvas ratio
   canvas.width = window.innerWidth * 0.6;
   canvas.height = canvas.width * 9 / 16; 
   // update the WebGL viewport so that it matches the new canvas size
