@@ -16,7 +16,8 @@ window.onclick = function(event) {
             }
         }
     }
-    if (!event.target.classList.contains('transition-choice')) {
+    if (!event.target.classList.contains('transition-choice')&& 
+        !event.target.closest('.preset-transition')) {
         document.querySelectorAll('.transition-choice').forEach(t => t.classList.remove('selected'));
         selectedTextarea = null; // reset selected textarea
         console.log("Selection cancelled");
@@ -53,7 +54,6 @@ document.querySelector('.transition-list').addEventListener('change', function(e
 // Select which preset transition when click
 let selectedTextarea = null; // store the selected textarea
 document.querySelector('.transition-list').addEventListener('click', function(event) {
-
     // outer wrapper to detect clicks
     let wrapper = event.target.closest('.preset-transition');
 
@@ -127,9 +127,8 @@ function addTask() {
     deleteBtn.className = "delete-text";
     deleteBtn.textContent = "Delete";
     deleteBtn.style.userSelect = "none";
-    deleteBtn.style.marginLeft = "10px";
+    deleteBtn.style.marginLeft = "20px";
     deleteBtn.style.color = "red";
-    deleteBtn.style.cursor = "pointer";
 
     // Create checkboxes container
     let choice = document.createElement("div");
