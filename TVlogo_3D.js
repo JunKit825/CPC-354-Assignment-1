@@ -58,7 +58,7 @@ window.onload = function init() {
   canvas = document.getElementById("gl-canvas");
 
   // set initial canvas to 80% of window size
-  canvas.width = window.innerWidth * 0.8;
+  canvas.width = window.innerWidth * 0.6;
   canvas.height = canvas.width * 9 / 16; 
   
   // Primitive (geometric shape/logo) initialization
@@ -77,7 +77,7 @@ window.onload = function init() {
 // function will be called whenever there is a window resize
 function onWindowResize() {
   // scale canvas width to 80% of window width and maintain 16:9 canvas ratio
-  canvas.width = window.innerWidth * 0.8;
+  canvas.width = window.innerWidth * 0.6;
   canvas.height = canvas.width * 9 / 16; 
   // update the WebGL viewport so that it matches the new canvas size
   gl.viewport(0, 0, canvas.width, canvas.height);
@@ -221,7 +221,7 @@ function getUIElement() {
   iterationValue = document.getElementById("iteration-value");
   iterationValue.innerHTML = iterationSlider.value;
 
-  iterationSlider.onchange = function(event) {
+  iterationSlider.oninput = function(event) {
     iterationValue.innerHTML = event.target.value;
     iterNum = iterationValue.innerHTML;
     resetAndRecompute();
@@ -232,7 +232,7 @@ function getUIElement() {
   depthValue = document.getElementById("depth-value");
   depthValue.innerHTML = depthSlider.value;
 
-  depthSlider.onchange = function(event) {
+  depthSlider.oninput = function(event) {
     depthValue.innerHTML = event.target.value;
     depth = depthValue.innerHTML/10;
     resetAndRecompute();
@@ -249,11 +249,6 @@ function getUIElement() {
     speedMultiplier = Number(event.target.value);
     resetAndRecompute();
   }
-
-  // if there is any changes in the checkbox in the dropdown, reset the animation
-  document.querySelectorAll('.dropdown-content input[type="checkbox"]').forEach(box => {
-    box.addEventListener('change', resetAndRecompute);
-  });
 
   const colorList = document.getElementById('color-list');
 
