@@ -464,8 +464,8 @@ function animUpdate() {
       case 8: // Animation 9
         scaleNum += 0.02 * speedMultiplier;
 
-        if (scaleNum >= 2) {
-          scaleNum = 2;
+        if (scaleNum >= 1.90) {
+          scaleNum = 1.90;
           currentOpIndex++;
         }
 
@@ -535,9 +535,9 @@ function animUpdate() {
         move[0] += 0.0125 * speedMultiplier;
         move[1] += 0.005 * speedMultiplier;
 
-        if (move[0] >= 2.5 / scaleNum && move[1] >= 1.0 / scaleNum) {
-          move[0] = 2.5 / scaleNum;
-          move[1] = 1.0 / scaleNum;
+        if (move[0] >= 2.25 / scaleNum && move[1] >= 0.9 / scaleNum) {
+          move[0] = 2.25 / scaleNum;
+          move[1] = 0.9 / scaleNum;
           currentOpIndex++;
         }
         break;
@@ -557,9 +557,9 @@ function animUpdate() {
         move[0] -= 0.0125 * speedMultiplier;
         move[1] -= 0.005 * speedMultiplier;
 
-        if (move[0] <= -2.5 / scaleNum && move[1] <= -1.0 / scaleNum) {
-          move[0] = -2.5 / scaleNum;
-          move[1] = -1.0 / scaleNum;
+        if (move[0] <= -2.25 / scaleNum && move[1] <= -0.9 / scaleNum) {
+          move[0] = -2.25 / scaleNum;
+          move[1] = -0.9 / scaleNum;
           currentOpIndex++;
         }
         break;
@@ -579,9 +579,9 @@ function animUpdate() {
         move[0] -= 0.0125 * speedMultiplier;
         move[1] += 0.005 * speedMultiplier;
 
-        if (move[0] <= -2.5 / scaleNum && move[1] >= 1.0 / scaleNum) {
-          move[0] = -2.5 / scaleNum;
-          move[1] = 1.0 / scaleNum;
+        if (move[0] <= -2.25 / scaleNum && move[1] >= 0.9 / scaleNum) {
+          move[0] = -2.25 / scaleNum;
+          move[1] = 0.9 / scaleNum;
           currentOpIndex++;
         }
         break;
@@ -601,9 +601,9 @@ function animUpdate() {
         move[0] += 0.0125 * speedMultiplier;
         move[1] -= 0.005 * speedMultiplier;
 
-        if (move[0] >= 2.5 / scaleNum && move[1] <= -1.0 / scaleNum) {
-          move[0] = 2.5 / scaleNum;
-          move[1] = -1.0 / scaleNum;
+        if (move[0] >= 2.25 / scaleNum && move[1] <= -0.9 / scaleNum) {
+          move[0] = 2.25 / scaleNum;
+          move[1] = -0.9 / scaleNum;
           currentOpIndex++;
         }
         break;

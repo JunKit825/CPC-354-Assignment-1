@@ -461,11 +461,28 @@ body
 }
 
 /*Colour picker part*/
-.color-picker-container input[type="color"] {
-  margin-left: 10px;
-  width: 3vw;
-  height: 4vh;
-  border-radius: 10%;
+#color-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;              /* space between elements */
+  margin-bottom: 6px;
+  list-style: none;       /* remove bullet point */
+}
+
+.color-box {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #000;
+  border-radius: 3px;
+}
+
+.delete-btn {
+  margin-left: auto;      /* push button to the right */
+  padding: 3px 8px;
+  font-size: 12px;
   cursor: pointer;
 }
 
+.start-restart-btn{
+  justify-content: center;
+}

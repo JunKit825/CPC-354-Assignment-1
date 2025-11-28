@@ -111,10 +111,6 @@
 				<input type="color" value="#ff0000" id="color-picker" onchange="getColor(event)"/>
 				<ul id="color-list"></ul>
 			</div>
-
-      <!-- Animation start & restart button, can add div wrap over here for tyling purpose -->
-      <input id="start-btn" class="anim-btn" type="button" value="Start/Pause">
-      <input id="restart-btn" class="anim-btn" type="button" value="Restart">
     </div>
 
 		<!-- Div to control run what operation -->
@@ -130,10 +126,17 @@
 					<label><input type="checkbox" value="BouncingTL"> Bouncing top left</label>
 					<label><input type="checkbox" value="BouncingBR"> Bouncing bottom right</label>
 			</div>
-		</div>
+	</div>
 
 		<!-- Div to show the chosen operation -->
     <div id="selected-op" class="selected-items"></div>
+
+	<div class="start-restart-btn">
+		<!-- Animation start & restart button, can add div wrap over here for tyling purpose -->
+		<input id="start-btn" class="anim-btn" type="button" value="Start/Pause">
+		<input id="restart-btn" class="anim-btn" type="button" value="Restart">
+	</div>
+	
   </div>
 
 	<!-- This need to include here as the loading should be slower than the html above, change will baozha -->
