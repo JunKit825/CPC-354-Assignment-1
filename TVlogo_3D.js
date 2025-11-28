@@ -59,7 +59,7 @@ window.onload = function init() {
 
   // set initial canvas to 80% of window size
   canvas.width = window.innerWidth * 0.8;
-  canvas.height = window.innerHeight * 0.8;
+  canvas.height = canvas.width * 9 / 16; 
   
   // Primitive (geometric shape/logo) initialization
   loadLogo(logo);
@@ -76,10 +76,9 @@ window.onload = function init() {
 
 // function will be called whenever there is a window resize
 function onWindowResize() {
-  // scale the canvas to 80% of window size
+  // scale canvas width to 80% of window width and maintain 16:9 canvas ratio
   canvas.width = window.innerWidth * 0.8;
-  canvas.height = window.innerHeight * 0.8;
-
+  canvas.height = canvas.width * 9 / 16; 
   // update the WebGL viewport so that it matches the new canvas size
   gl.viewport(0, 0, canvas.width, canvas.height);
 
@@ -641,7 +640,7 @@ function animUpdate() {
   }
 
   // Perform vertex transformation
-  modelViewMatrix = mult(modelViewMatrix, translate(move[0], move[1], move[2])); // translation will perform first because if we perform scale first, it will affect the transition distance and end up will let the object out of the canvas
+  modelViewMatrix = mult(modelViewMatrix, translate(move[0], move[1], move[2])); // we will apply translation before scaling because if scaling is applied first, it will also scale the translation values and cause the object to move too far and go out of the canvas.
   modelViewMatrix = mult(modelViewMatrix, scale(scaleNum, scaleNum, 1));
   modelViewMatrix = mult(modelViewMatrix, rotateY(theta[2]));
 
