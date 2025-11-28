@@ -24,35 +24,6 @@ window.onclick = function(event) {
     }
 }
 
-// For current animation selection logic
-document.querySelectorAll('.dropdown-content input[type="checkbox"]').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-        const text = this.value;
-        const selectedItems = document.querySelector('.selected-items');
-        const anyChosen = document.querySelectorAll('.dropdown-content input[type="checkbox"]:checked').length;
-
-        if (this.checked && anyChosen === 1) {
-            selectedItems.innerHTML = "";
-        }
-
-        const existingItem = selectedItems.querySelector(`[data-value="${text}"]`);
-
-        if (this.checked) {
-            if (!existingItem) {
-                const selectedItem = document.createElement('div');
-                selectedItem.setAttribute('data-value', text);
-                selectedItem.innerText = text;
-                selectedItems.appendChild(selectedItem);
-            }
-        } else {
-            if (existingItem) {
-                existingItem.remove();
-            }
-        }
-    });
-});
-
-
 // From Dropdown botton choose the transition for preset transition
 document.querySelector('.transition-list').addEventListener('change', function(event) {
     if (event.target.matches('input[type="checkbox"]')) {
