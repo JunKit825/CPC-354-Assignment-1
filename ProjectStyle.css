@@ -9,18 +9,35 @@ body
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  background-color: #000000;
+}
+
+.canva-slider {
+  display: flex;
+  flex-direction: column;
 }
 
 .canvas
 {
-	border: 10px solid #4a4e69;
-	border-radius: 10px;
-  margin-right: 2vw
+  margin-right: 2vw;
+}
+
+#gl-canvas {
+  background-color: #591616;
+}
+
+.slider-bar {
+  margin-left: 2vw;
+  height: 10vh;
+  display: flex;
+  flex-direction: row;
+  gap: 5vw;
 }
 
 * {
-  font-family: "WDXL Lubrifont SC", sans-serif;
-  font-weight: 800;
+  font-family: "Roboto Condensed", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
   font-style: normal;
 }
 
@@ -83,8 +100,8 @@ body
 
 /*Input for generate logo*/
 .input-logo{
-  width: 30vw;
-  position: absolute; 
+  width: 100%;
+  height: 5vh;
   top: 50px; 
   left: 50px; 
   color: white;
@@ -94,31 +111,34 @@ body
   width: 10vw;
   height: 1.68vw;
   font-size: 1.2vw;
-  background-color: #fffbc6;
+  border-radius: 10px;
+  border-color: #d88cc4;
+  background-color: #d88cc4;
 }
 
 #generate-btn {
   margin-left: 10px;
-  width: 10vw;
+  width: 12vw;
   height: 2vw;
-  border-radius: 5px;
-  border-color: #c9bc00;
-  background-color: #ffcb3e;
+  border-radius: 10px;
+  border-color: #8a0967;
+  background-color: #d1169f;
   text-align: center;
 	font-weight: bold;
 	font-size: 1.2vw;
   color: #000000;
+  cursor: pointer;
 }
 
 #generate-btn.disabled {
   transform: none !important;
-  background-color: #ffcb3e !important;
+  background-color: #d1169f !important;
   pointer-events: none !important;
 }
 
 #generate-btn:hover {
   transform: scale(1.1);
-  background-color: #ffbb00;
+  background-color: #ac0f82;
 }
 
 /* Below is the select current animation/operation de*/
@@ -231,6 +251,7 @@ body
 	font-weight: bold;
 	font-size: 1.25vw;
   color: #000000;
+  cursor: pointer;
 }
 
 .add-transition-button.disabled,
@@ -250,8 +271,10 @@ body
 /* Below is iteration slider css */
 
 .iteration-slider-container {
-  width: 100%;
-  margin-top: 30px;
+  width: 20%;
+  padding: 20px;
+  text-align: center;
+  color: #ffffff;
 }
 
 .iteration-slider-class {
@@ -278,7 +301,7 @@ body
   width: 20px;
   height: 20px;
   border-radius: 100%;
-  background: #f0d718;
+  background: #790691;
   cursor: pointer;
 }
 
@@ -286,15 +309,17 @@ body
   width: 20px;
   height: 20px;
   border-radius: 100%;
-  background: #f0d718;
+  background: #790691;
   cursor: pointer;
 }
 
 /* Below is depth slider design */
 
 .depth-slider-container {
-  width: 100%;
-  margin-top: 40px;
+  width: 20%;
+  padding: 20px;
+  text-align: center;
+  color: #ffffff;
 }
 
 .depth-slider-class {
@@ -321,7 +346,7 @@ body
   width: 20px;
   height: 20px;
   border-radius: 100%;
-  background: #f0d718;
+  background: #790691;
   cursor: pointer;
 }
 
@@ -329,15 +354,17 @@ body
   width: 20px;
   height: 20px;
   border-radius: 100%;
-  background: #f0d718;
+  background: #790691;
   cursor: pointer;
 }
 
 /*Below is Speed slider design */
 
 .speed-slider-container {
-  width: 100%;
-  margin-top: 40px;
+  width: 20%;
+  padding: 20px;
+  text-align: center;
+  color: #ffffff;
 }
 
 .speed-slider-class {
@@ -364,7 +391,7 @@ body
   width: 20px;
   height: 20px;
   border-radius: 100%;
-  background: #f0d718;
+  background: #790691;
   cursor: pointer;
 }
 
@@ -372,11 +399,32 @@ body
   width: 20px;
   height: 20px;
   border-radius: 100%;
-  background: #f0d718;
+  background: #790691;
   cursor: pointer;
 }
 
 /*Colour picker part*/
+.color-picker-container {
+  margin-left: 3.15vw;
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  color: #ffffff;
+}
+
+#color-list {
+  margin-top: 15px;
+  margin-right: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
 #color-list li {
   display: flex;
   align-items: center;
@@ -394,10 +442,30 @@ body
 
 .delete-btn {
   margin-left: auto;      /* push button to the right */
-  padding: 3px 8px;
-  font-size: 12px;
   cursor: pointer;
+  width: 60px;
+  height: 25px;
+  border-radius: 10px;
+  border-color: #8a0967;
+  background-color: #d1169f;
+  text-align: center;
+	font-weight: bold;
+	font-size: 1vw;
+  color: #000000;
 }
+
+
+.delete-btn:hover {
+  transform: scale(1.1);
+  background-color: #ac0f82;
+}
+
+.delete-btn.disabled {
+  transform: none !important;
+  background-color: #d1169f !important;
+  pointer-events: none !important;
+}
+
 
 .start-restart-btn{
   justify-content: center;

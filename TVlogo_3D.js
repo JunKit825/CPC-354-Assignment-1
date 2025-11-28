@@ -275,7 +275,7 @@ function configWebGL() {
 
   // Set the viewport and clear the color
   gl.viewport(0, 0, canvas.width, canvas.height);
-  gl.clearColor(1.0, 1.0, 1.0, 1.0);
+  gl.clearColor(0.05, 0.05, 0.05, 1.0);
 
   // Enable hidden-surface removal
   gl.enable(gl.DEPTH_TEST);
@@ -675,7 +675,10 @@ function disableUI() {
 
   document.querySelectorAll('.addTask-button input[type="checkbox"]').forEach(box => box.disabled = true);
 
-  document.querySelectorAll('.delete-btn').forEach(btn => btn.disabled = true);
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.disabled = true;
+    btn.classList.add("disabled");
+  });
 
   document.querySelectorAll('.delete-text, .hide-show-text').forEach(textBtn => { 
     textBtn.classList.add("disabled"); 
@@ -715,7 +718,10 @@ function enableUI() {
 
   document.querySelectorAll('.addTask-button input[type="checkbox"]').forEach(box => box.disabled = false);
 
-  document.querySelectorAll('.delete-btn').forEach(btn => btn.disabled = false);
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.disabled = false;
+    btn.classList.remove("disabled");
+  });
 
   document.querySelectorAll('.delete-text, .hide-show-text').forEach(textBtn => {
     textBtn.classList.remove("disabled");
