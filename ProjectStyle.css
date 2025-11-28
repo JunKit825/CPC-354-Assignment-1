@@ -454,6 +454,19 @@ body
   color: #000000;
 }
 
+
+.delete-btn:hover {
+  transform: scale(1.1);
+  background-color: #ac0f82;
+}
+
+.delete-btn.disabled {
+  transform: none !important;
+  background-color: #d1169f !important;
+  pointer-events: none !important;
+}
+
+
 .start-restart-btn{
   justify-content: center;
 }

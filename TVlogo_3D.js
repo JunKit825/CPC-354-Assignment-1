@@ -675,7 +675,10 @@ function disableUI() {
 
   document.querySelectorAll('.addTask-button input[type="checkbox"]').forEach(cb => cb.disabled = true);
 
-  document.querySelectorAll('.delete-btn').forEach(btn => btn.disabled = true);
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.disabled = true;
+    btn.classList.add("disabled");
+  });
 
   document.querySelectorAll('.delete-text, .hide-show-text').forEach(el => { 
     el.classList.add("disabled"); 
@@ -715,7 +718,10 @@ function enableUI() {
 
   document.querySelectorAll('.addTask-button input[type="checkbox"]').forEach(cb => cb.disabled = false);
 
-  document.querySelectorAll('.delete-btn').forEach(btn => btn.disabled = false);
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.disabled = false;
+    btn.classList.remove("disabled");
+  });
 
   document.querySelectorAll('.delete-text, .hide-show-text').forEach(el => {
     el.classList.remove("disabled");
