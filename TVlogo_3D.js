@@ -57,7 +57,7 @@ window.onload = function init() {
   
   canvas = document.getElementById("gl-canvas");
 
-  // set initial canvas to 80% of window size
+  // scale canvas width to 60% of window width and maintain 16:9 canvas ratio
   canvas.width = window.innerWidth * 0.6;
   canvas.height = canvas.width * 9 / 16; 
   
@@ -76,7 +76,7 @@ window.onload = function init() {
 
 // function will be called whenever there is a window resize
 function onWindowResize() {
-  // scale canvas width to 80% of window width and maintain 16:9 canvas ratio
+  // scale canvas width to 60% of window width and maintain 16:9 canvas ratio
   canvas.width = window.innerWidth * 0.6;
   canvas.height = canvas.width * 9 / 16; 
   // update the WebGL viewport so that it matches the new canvas size
@@ -86,7 +86,7 @@ function onWindowResize() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   modelViewMatrix = mat4();
   modelViewMatrix = mult(modelViewMatrix, translate(0, -0.2357, 0));
-  modelViewMatrix = mult(modelViewMatrix, translate(move[0], move[1], move[2])); // translation will perform first because if we perform scale first, it will affect the transition distance and end up will let the object out of the canvas
+  modelViewMatrix = mult(modelViewMatrix, translate(move[0], move[1], move[2])); // we will apply translation before scaling because if scaling is applied first, it will also scale the translation values and cause the object to move too far and go out of the canvas
   modelViewMatrix = mult(modelViewMatrix, scale(scaleNum, scaleNum, 1));
   modelViewMatrix = mult(modelViewMatrix, rotateY(theta[2]));
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
@@ -464,8 +464,8 @@ function animUpdate() {
       case 8: // Animation 9
         scaleNum += 0.02 * speedMultiplier;
 
-        if (scaleNum >= 2) {
-          scaleNum = 2;
+        if (scaleNum >= 1.90) {
+          scaleNum = 1.90;
           currentOpIndex++;
         }
 
@@ -535,9 +535,9 @@ function animUpdate() {
         move[0] += 0.0125 * speedMultiplier;
         move[1] += 0.005 * speedMultiplier;
 
-        if (move[0] >= 2.5 / scaleNum && move[1] >= 1.0 / scaleNum) {
-          move[0] = 2.5 / scaleNum;
-          move[1] = 1.0 / scaleNum;
+        if (move[0] >= 2.25 / scaleNum && move[1] >= 0.9 / scaleNum) {
+          move[0] = 2.25 / scaleNum;
+          move[1] = 0.9 / scaleNum;
           currentOpIndex++;
         }
         break;
@@ -557,9 +557,9 @@ function animUpdate() {
         move[0] -= 0.0125 * speedMultiplier;
         move[1] -= 0.005 * speedMultiplier;
 
-        if (move[0] <= -2.5 / scaleNum && move[1] <= -1.0 / scaleNum) {
-          move[0] = -2.5 / scaleNum;
-          move[1] = -1.0 / scaleNum;
+        if (move[0] <= -2.25 / scaleNum && move[1] <= -0.9 / scaleNum) {
+          move[0] = -2.25 / scaleNum;
+          move[1] = -0.9 / scaleNum;
           currentOpIndex++;
         }
         break;
@@ -579,9 +579,9 @@ function animUpdate() {
         move[0] -= 0.0125 * speedMultiplier;
         move[1] += 0.005 * speedMultiplier;
 
-        if (move[0] <= -2.5 / scaleNum && move[1] >= 1.0 / scaleNum) {
-          move[0] = -2.5 / scaleNum;
-          move[1] = 1.0 / scaleNum;
+        if (move[0] <= -2.25 / scaleNum && move[1] >= 0.9 / scaleNum) {
+          move[0] = -2.25 / scaleNum;
+          move[1] = 0.9 / scaleNum;
           currentOpIndex++;
         }
         break;
@@ -601,9 +601,9 @@ function animUpdate() {
         move[0] += 0.0125 * speedMultiplier;
         move[1] -= 0.005 * speedMultiplier;
 
-        if (move[0] >= 2.5 / scaleNum && move[1] <= -1.0 / scaleNum) {
-          move[0] = 2.5 / scaleNum;
-          move[1] = -1.0 / scaleNum;
+        if (move[0] >= 2.25 / scaleNum && move[1] <= -0.9 / scaleNum) {
+          move[0] = 2.25 / scaleNum;
+          move[1] = -0.9 / scaleNum;
           currentOpIndex++;
         }
         break;
@@ -811,7 +811,23 @@ function getColor(event) {
 
       let vec = baseColors[i];
       let list = document.createElement("li");
-      list.textContent = colorValue; // show the color value
+
+      // Create color preview box
+      let colorBox = document.createElement("div");
+      colorBox.style.width = "20px";
+      colorBox.style.height = "20px";
+      colorBox.style.display = "inline-block";
+      colorBox.style.marginRight = "10px";
+      colorBox.style.border = "1px solid #000";
+      colorBox.style.backgroundColor = colorValue;
+
+      // Text label
+      let label = document.createElement("span");
+      label.textContent = colorValue;
+
+      // Append UI elements
+      list.appendChild(colorBox);
+      list.appendChild(label);
 
       let button = document.createElement("button");
       button.className = 'delete-btn';
