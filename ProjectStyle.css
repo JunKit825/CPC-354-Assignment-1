@@ -91,11 +91,61 @@ body
 
   display: flex;
   flex-direction: column;
-  gap: 0.52vw;
   padding: 1vw;
+  gap: 0;
 
-  overflow-y: auto;  /*allows vertical scrolling function when content grows */
-  overflow-x: hidden;  /*helps to keep everything inside horizontally */
+  overflow: hidden;
+}
+
+/* Upper section - scrollable */
+.operation-upper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.5vw;
+  gap: 10px;
+}
+
+/* Divider line between sections */
+.operation-divider {
+  height: 3px;
+  background: linear-gradient(to right, #4a4e69 0%, #4a4e69 100%);
+  margin: 15px 0;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Lower section - fixed height, no scroll */
+.operation-lower {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 40vh;
+}
+
+.operation-upper::-webkit-scrollbar,
+.selected-items::-webkit-scrollbar {
+  width: 8px;
+}
+
+.operation-upper::-webkit-scrollbar-track,
+.selected-items::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.operation-upper::-webkit-scrollbar-thumb,
+.selected-items::-webkit-scrollbar-thumb {
+  background: #4a4e69;
+  border-radius: 10px;
+}
+
+.operation-upper::-webkit-scrollbar-thumb:hover,
+.selected-items::-webkit-scrollbar-thumb:hover {
+  background: #353849;
 }
 
 /*Input for generate logo*/
@@ -168,6 +218,22 @@ body
 .dropdown-content label:hover {
     background-color: #ddd;
 }
+
+.dropdown button {
+  width: 100%;
+  height: 35px;
+  border-radius: 5px;
+  border: 2px solid #4a4e69;
+  background-color: #9c9c9c;
+  font-weight: bold;
+  font-size: 1vw;
+  cursor: pointer;
+  color: #000;
+}
+
+.dropdown button:hover {
+  background-color: #7a7a7a;
+}
 /*.show {
     display: block;
 }*/
@@ -176,12 +242,13 @@ body
 	display: block;
 }
 .selected-items {
-    width: 100%;
-    box-sizing: border-box;
-    margin-top: 0.46vh;
-    padding: 0.46vh 0.52vw;
-    border: 0.05vw solid #ccc;
-    flex-shrink: 0;
+    min-height: 60px;
+    max-height: 120px;
+    overflow-y: auto;
+    padding: 10px;
+    border: 2px solid #4a4e69;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
 }
 .selected-items div {
     margin-bottom: 0.46vh;
@@ -192,10 +259,10 @@ body
 /* This is for the preset transition */
 .transition-button-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  gap: 20px; 
-  padding: 10px;
+  gap: 10px;
+  padding: 10px 0;
 }
 
 .transition-choice {
@@ -242,14 +309,15 @@ body
 }
 
 .add-transition-button, #selected-transition {
-  width: 210px;
+  width: 100%;
+  max-width: 250px;
   height: 40px;
   border-radius: 5px;
   border-color: #c9bc00;
   background-color: #ffcb3e;
   text-align: center;
-	font-weight: bold;
-	font-size: 1.25vw;
+  font-weight: bold;
+  font-size: 1.25vw;
   color: #000000;
   cursor: pointer;
 }
@@ -262,11 +330,16 @@ body
 }
 
 .add-transition-button:hover, #selected-transition:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
   background-color: #ffbb00;
 }
 
-
+.transition-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
 
 /* Below is iteration slider css */
 
@@ -467,6 +540,10 @@ body
 }
 
 
-.start-restart-btn{
+.start-restart-btn {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
   justify-content: center;
+  margin-top: auto;
 }
