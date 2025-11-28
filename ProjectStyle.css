@@ -18,6 +18,12 @@ body
   margin-right: 2vw
 }
 
+* {
+  font-family: "WDXL Lubrifont SC", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
 /* 
 .horizontal-align
 {
@@ -156,11 +162,11 @@ body
 }
 
 .operation-plane {
-  width: 35.83vw;
+  width: 30vw;
   height: 75.67vh;
   border: 0.52vw solid #4a4e69;
   border-radius: 0.52vw;
-  background-color: white;
+  background-color: rgb(248, 252, 197);
 
   display: flex;
   flex-direction: column;
@@ -169,6 +175,40 @@ body
 
   overflow-y: auto;  /*allows vertical scrolling function when content grows */
   overflow-x: hidden;  /*helps to keep everything inside horizontally */
+}
+
+/*Input for generate logo*/
+.input-logo{
+  width: 30vw;
+  position: absolute; 
+  top: 50px; 
+  left: 50px; 
+  color: white;
+}
+
+#userText{
+  width: 10vw;
+  height: 1.68vw;
+  font-size: 1.2vw;
+  background-color: #fffbc6;
+}
+
+#generate-btn {
+  margin-left: 10px;
+  width: 10vw;
+  height: 2vw;
+  border-radius: 5px;
+  border-color: #c9bc00;
+  background-color: #ffcb3e;
+  text-align: center;
+	font-weight: bold;
+	font-size: 1.2vw;
+  color: #000000;
+}
+
+#generate-btn:hover {
+  transform: scale(1.1);
+  background-color: #ffbb00;
 }
 
 /* Below is the select current animation/operation de*/
@@ -228,16 +268,23 @@ body
 }
 
 /* This is for the preset transition */
+.transition-button-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px; 
+  padding: 10px;
+}
 
 .transition-choice {
     width:5.21vw;
-    margin-top: 0.46vh;
-    padding: 0.46vh 0.52vw;
-    
+    min-height: 20px;
+    margin-top: 5px;
+    padding: 5px;
 }
 
 .transition-choice.selected {
-	border: 0.10vw solid blue;
+	border: 2px solid blue;
 }
 
 .transition-choice button label{
@@ -245,26 +292,51 @@ body
 }
 
 .preset-transition {
-    position: relative;
-    padding: 0.46vh 0.52vw;
+  background: rgb(250, 254, 133);
+  margin-top: 2px;
+  border-radius: 20px;
+  position: relative;
+  padding: 1vh 1vw;
 }
 
 .transition-choice {
-    width: 100%;
-    height: 100%;
-    display: block; /* or inline-block depending on layout */
-    cursor: pointer;
-		border: 0.05vw solid #ccc;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  display: block; /* or inline-block depending on layout */
+  cursor: pointer;
+  border: 0.1vw solid #9c9c9c;
 }
 
-.hide-show-text {
+.hide-show-text, .delete-text {
 	color: rgb(137, 134, 138);
 	cursor: pointer;
 }
 
-.hide-show-text:hover {
+.hide-show-text:hover, .delete-text:hover {
 	color: blue;
 	text-decoration: underline;
+  font-weight: bold;
+}
+
+.add-transition-button, #selected-transition {
+  width: 210px;
+  height: 40px;
+  border-radius: 5px;
+  border-color: #c9bc00;
+  background-color: #ffcb3e;
+  text-align: center;
+	font-weight: bold;
+	font-size: 1.25vw;
+  color: #000000;
+}
+
+.add-transition-button:hover, #selected-transition:hover {
+  transform: scale(1.1);
+  background-color: #ffbb00;
+}
+
+.addTask-button:hover {
 }
 
 /* Below is iteration slider css */
@@ -298,7 +370,7 @@ body
   width: 20px;
   height: 20px;
   border-radius: 100%;
-  background: #04AA6D;
+  background: #f0d718;
   cursor: pointer;
 }
 
@@ -306,7 +378,7 @@ body
   width: 20px;
   height: 20px;
   border-radius: 100%;
-  background: #04AA6D;
+  background: #f0d718;
   cursor: pointer;
 }
 
@@ -314,7 +386,7 @@ body
 
 .depth-slider-container {
   width: 100%;
-  margin-top: 30px;
+  margin-top: 40px;
 }
 
 .depth-slider-class {
@@ -341,15 +413,15 @@ body
   width: 20px;
   height: 20px;
   border-radius: 100%;
-  background: #04AA6D;
+  background: #f0d718;
   cursor: pointer;
 }
 
 .depth-slider-class::-moz-range-thumb {
-  width: 2vw;
-  height: 3.8vh;
-  border-radius: 50%;
-  background: #04AA6D;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  background: #f0d718;
   cursor: pointer;
 }
 
@@ -357,13 +429,16 @@ body
 
 .speed-slider-container {
   width: 100%;
+  margin-top: 40px;
 }
 
 .speed-slider-class {
   -webkit-appearance: none;
-  width: 100%;
-  height: 2vh;
-  border-radius: 0.2vw;
+  width: 90%;
+  display: block;
+  margin: 0 auto;
+  height: 10px;
+  border-radius: 5px;
   background: #d3d3d3;
   outline: none;
   opacity: 0.7;
@@ -378,21 +453,63 @@ body
 .speed-slider-class::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 2vw;
-  height: 3.8vh;
-  border-radius: 50%;
-  background: #04AA6D;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  background: #f0d718;
   cursor: pointer;
 }
 
 .speed-slider-class::-moz-range-thumb {
-  width: 2vw;
-  height: 3.8vh;
-  border-radius: 50%;
   width: 20px;
   height: 20px;
   border-radius: 100%;
-  background: #04AA6D;
+  background: #f0d718;
   cursor: pointer;
 }
 
+/*Colour picker part*/
+.color-picker-container input[type="color"] {
+  margin-left: 10px;
+  width: 3vw;
+  height: 4vh;
+  border-radius: 10%;
+  cursor: pointer;
+}
+
+.color-picker-container input[type="color"]:hover {
+  transform: scale(1.1);
+}
+
+#color-list {
+  margin-top: 15px;
+  margin-right: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+  list-style: none;
+}
+
+.delete-btn {
+  margin-left: 5px;
+  width: 4vw;
+  height: 40px;
+  border-radius: 5px;
+  border-color: #c9bc00;
+  background-color: #ffcb3e;
+  text-align: center;
+	font-weight: bold;
+	font-size: 1.25vw;
+  color: #000000;
+}
+
+.delete-btn:hover {
+  transform: scale(1.1);
+  background-color: #ffbb00;
+}
+
+* {
+  scrollbar-width: thin;              /* thin, auto, none */
+  scrollbar-color:  rgb(182, 182, 30) rgb(248, 252, 197);  /* thumb and track */
+}
