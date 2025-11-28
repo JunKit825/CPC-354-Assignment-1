@@ -22,6 +22,10 @@ body
   margin-right: 2vw;
 }
 
+#gl-canvas {
+  background-color: #591616;
+}
+
 .slider-bar {
   margin-left: 2vw;
   height: 10vh;
@@ -31,8 +35,9 @@ body
 }
 
 * {
-  font-family: "WDXL Lubrifont SC", sans-serif;
-  font-weight: 800;
+  font-family: "Roboto Condensed", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
   font-style: normal;
 }
 

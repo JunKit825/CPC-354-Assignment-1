@@ -275,7 +275,7 @@ function configWebGL() {
 
   // Set the viewport and clear the color
   gl.viewport(0, 0, canvas.width, canvas.height);
-  gl.clearColor(1.0, 1.0, 1.0, 1.0);
+  gl.clearColor(0.05, 0.05, 0.05, 1.0);
 
   // Enable hidden-surface removal
   gl.enable(gl.DEPTH_TEST);
