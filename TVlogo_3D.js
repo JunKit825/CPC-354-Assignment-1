@@ -136,10 +136,10 @@ function getUIElement() {
     if (box.checked) {
       const selectedDiv = document.getElementById("selected-op");
       // create a div for each checked operation
-      const div = document.createElement("div");
-      div.setAttribute("data-value", box.value);
-      div.innerText = box.value;
-      selectedDiv.appendChild(div);
+      const newdiv = document.createElement("div");
+      newdiv.setAttribute("data-value", box.value);
+      newdiv.innerText = box.value;
+      selectedDiv.appendChild(newdiv);
     }
 
     // a listener for each checkbox to update selected operation
@@ -154,10 +154,10 @@ function getUIElement() {
 
       // if new operation is checked but not yet added in the existing operation, add it
       if (box.checked && !existingItem) {
-        const div = document.createElement("div");
-        div.setAttribute("data-value", box.value);
-        div.innerText = box.value;
-        selectedDiv.appendChild(div);
+        const newdiv = document.createElement("div");
+        newdiv.setAttribute("data-value", box.value);
+        newdiv.innerText = box.value;
+        selectedDiv.appendChild(newdiv);
       }
 
       // reset animation whenever checkbox changes
@@ -671,16 +671,16 @@ function disableUI() {
 
   document.querySelector(".dropdown > button").disabled = true;
 
-  document.querySelectorAll('#options input[type="checkbox"]').forEach(cb => cb.disabled = true);
+  document.querySelectorAll('#options input[type="checkbox"]').forEach(box => box.disabled = true);
 
-  document.querySelectorAll('.addTask-button input[type="checkbox"]').forEach(cb => cb.disabled = true);
+  document.querySelectorAll('.addTask-button input[type="checkbox"]').forEach(box => box.disabled = true);
 
   document.querySelectorAll('.delete-btn').forEach(btn => btn.disabled = true);
 
-  document.querySelectorAll('.delete-text, .hide-show-text').forEach(el => { 
-    el.classList.add("disabled"); 
-    el.style.pointerEvents = "none"; 
-    el.style.opacity = "0.5";
+  document.querySelectorAll('.delete-text, .hide-show-text').forEach(textBtn => { 
+    textBtn.classList.add("disabled"); 
+    textBtn.style.pointerEvents = "none"; 
+    textBtn.style.opacity = "0.5";
   });
 
   document.querySelectorAll('.preset-transition').forEach(box => {
@@ -711,16 +711,16 @@ function enableUI() {
 
   document.querySelector(".dropdown > button").disabled = false;
 
-  document.querySelectorAll('#options input[type="checkbox"]').forEach(cb => cb.disabled = false);
+  document.querySelectorAll('#options input[type="checkbox"]').forEach(box => box.disabled = false);
 
-  document.querySelectorAll('.addTask-button input[type="checkbox"]').forEach(cb => cb.disabled = false);
+  document.querySelectorAll('.addTask-button input[type="checkbox"]').forEach(box => box.disabled = false);
 
   document.querySelectorAll('.delete-btn').forEach(btn => btn.disabled = false);
 
-  document.querySelectorAll('.delete-text, .hide-show-text').forEach(el => {
-    el.classList.remove("disabled");
-    el.style.pointerEvents = "auto";
-    el.style.opacity = "1";
+  document.querySelectorAll('.delete-text, .hide-show-text').forEach(textBtn => {
+    textBtn.classList.remove("disabled");
+    textBtn.style.pointerEvents = "auto";
+    textBtn.style.opacity = "1";
   });
 
   document.querySelectorAll('.preset-transition').forEach(box => {
