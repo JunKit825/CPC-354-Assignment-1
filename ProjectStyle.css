@@ -1,5 +1,3 @@
-/* First section here is fro yewken de */
-
 body
 {
   width: 100%;
@@ -17,8 +15,10 @@ body
 {
 	border: 10px solid #4a4e69;
 	border-radius: 10px;
+  margin-right: 2vw
 }
 
+/* 
 .horizontal-align
 {
 	display: flex;
@@ -37,31 +37,31 @@ body
 
 .panel
 {
-	margin-left: 10px;
-	width: 400px;
-	height: 720px;
-	border: 10px solid #4a4e69;
-	border-radius: 10px;
+	margin-left: 0.52vw;
+	width: 20.83vw;
+	height: 66.67vh;
+	border: 0.52vw solid #4a4e69;
+	border-radius: 0.52vw;
 	background-color: #022639;
 }
 
 .param-panel
 {
-	width: 270px;
-	margin: 5px 0 5px 0;
+	width: 14.06vw;
+	margin: 0.46vh 0 0.46vh 0;
 }
 
 .mg-top-bottom
 {
-	margin-top: 10px;
-	margin-bottom: 10px;
+	margin-top: 0.93vh;
+	margin-bottom: 0.93vh;
 }
 
 
 .checkText
 {
-	width: 150px;
-	height: 20px;
+	width: 7.81vw;
+	height: 1.85vh;
 	font-weight: bold;
 	font-size: large;
 	color: #ffffff;
@@ -69,29 +69,29 @@ body
 
 .checkRadio
 {
-	width: 20px;
-	height: 20px;
-	margin-right: 22px;
+	width: 1.04vw;
+	height: 1.85vh;
+	margin-right: 1.15vw;
 }
 
 .textbox
 {
-	margin-left: 15px;
-	width: 55px;
-	height: 55px;
+	margin-left: 0.78vw;
+	width: 2.86vw;
+	height: 5.09vh;
 	background: #0077b6;
-	border: 5px solid #00b4d8;
-	border-radius: 10px;
+	border: 0.26vw solid #00b4d8;
+	border-radius: 0.52vw;
 }
 
 .textbox2
 {
-	margin-left: 15px;
-	width: 55px;
-	height: 40px;
+	margin-left: 0.78vw;
+	width: 2.86vw;
+	height: 3.70vh;
 	background: #0077b6;
-	border: 5px solid #00b4d8;
-	border-radius: 10px;
+	border: 0.26vw solid #00b4d8;
+	border-radius: 0.52vw;
 }
 
 .textbox p
@@ -100,7 +100,7 @@ body
 	color: #ffffff;
 	text-align: center;
 	font-weight: bold;
-	font-size: 25px;
+	font-size: 1.30vw;
 	line-height: 0.25;
 }
 
@@ -110,22 +110,22 @@ body
 	color: #ffffff;
 	text-align: center;
 	font-weight: bold;
-	font-size: 20px;
+	font-size: 1.04vw;
 	line-height: 0.1;
-}
+} */
 
 .anim-btn
 {
-	margin: 15px 0px 5px 0px;
-	width: 270px;
-	height: 70px;
+	margin: 1.39vh 0 0.46vh 0;
+	width: 14.06vw;
+	height: 6.48vh;
 	background: #34a0a4;
-	border: 5px solid #99d98c;
-	border-radius: 10px;
+	border: 0.26vw solid #99d98c;
+	border-radius: 0.52vw;
 	color: #ffffff;
 	text-align: center;
 	font-weight: bold;
-	font-size: 24px;
+	font-size: 1.25vw;
 	outline : none;
 }
 
@@ -137,13 +137,13 @@ body
 .anim-btn:active
 {
   background-color 	: #21ff94;
-  box-shadow 		: 0 2px #666666;
-  transform 		: translateY(2px);
+  box-shadow 		: 0 0.19vh #666666;
+  transform 		: translateY(0.19vh);
 }
 
 .anim-btn:disabled
 {
-    animation: none;
+  animation: none;
 	pointer-events: none;
 	opacity: 0.5;
 }
@@ -151,8 +151,24 @@ body
 @keyframes bounce 
 {
 	0%, 20%, 60%, 100%	{transform: translateY(0);}
-	40% 				{transform: translateY(-10px);}
-	80% 				{transform: translateY(-5px);}
+	40% 				{transform: translateY(-0.93vh);}
+	80% 				{transform: translateY(-0.46vh);}
+}
+
+.operation-plane {
+  width: 35.83vw;
+  height: 75.67vh;
+  border: 0.52vw solid #4a4e69;
+  border-radius: 0.52vw;
+  background-color: white;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.52vw;
+  padding: 1vw;
+
+  overflow-y: auto;  /*allows vertical scrolling function when content grows */
+  overflow-x: hidden;  /*helps to keep everything inside horizontally */
 }
 
 /* Below is the select current animation/operation de*/
@@ -166,16 +182,19 @@ body
     display: none;
     position: absolute;
     background-color: #f1f1f1;
-    min-width: 120px;
+    min-width: 6.25vw;
     overflow-y: auto;
-    max-height: 100px;
-    border: 1px solid #ddd;
+    max-height: 9.26vh;
+    border: 0.05vw solid #ddd;
     z-index: 1;
 }
 .dropdown-content label {
     display: block;
-    padding: 5px 10px;
+    padding: 0.42vh 0.52vw;
     cursor: pointer;
+    font-size: min(1vw, 0.95rem);
+    white-space: normal;
+    word-break: break-word;
 }
 .dropdown-content label:hover {
     background-color: #ddd;
@@ -188,33 +207,37 @@ body
 	display: block;
 }
 .selected-items {
-    width:100px;
-    margin-top: 5px;
-    padding: 5px;
-    border: 1px solid #ccc;
+    width: 100%;
+    max-height: 12vh;
+    margin-top: 0.46vh;
+    padding: 0.46vh 0.52vw;
+    border: 0.05vw solid #ccc;
+    overflow-y: auto;
 }
 .selected-items div {
-    margin-bottom: 5px;
+    margin-bottom: 0.46vh;
+    font-size: min(1vw, 0.95rem);
+    word-break: break-word;
 }
 
 .operation-plane {
   display: flex;           /* use flexbox */
   flex-direction: column;  /* stack children vertically */
   align-items: flex-start; /* optional: left-align items */
-  gap: 10px;               /* optional: space between items */
+  gap: 0.52vw;               /* optional: space between items */
 }
 
 /* This is for the preset transition */
 
 .transition-choice {
-    width:100px;
-    margin-top: 5px;
-    padding: 5px;
+    width:5.21vw;
+    margin-top: 0.46vh;
+    padding: 0.46vh 0.52vw;
     
 }
 
 .transition-choice.selected {
-	border: 2px solid blue;
+	border: 0.10vw solid blue;
 }
 
 .transition-choice button label{
@@ -223,7 +246,7 @@ body
 
 .preset-transition {
     position: relative;
-    padding: 5px;
+    padding: 0.46vh 0.52vw;
 }
 
 .transition-choice {
@@ -231,7 +254,7 @@ body
     height: 100%;
     display: block; /* or inline-block depending on layout */
     cursor: pointer;
-		border: 1px solid #ccc;
+		border: 0.05vw solid #ccc;
 }
 
 .hide-show-text {
@@ -323,6 +346,49 @@ body
 }
 
 .depth-slider-class::-moz-range-thumb {
+  width: 2vw;
+  height: 3.8vh;
+  border-radius: 50%;
+  background: #04AA6D;
+  cursor: pointer;
+}
+
+/*Below is Speed slider design */
+
+.speed-slider-container {
+  width: 100%;
+}
+
+.speed-slider-class {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 2vh;
+  border-radius: 0.2vw;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.speed-slider-class:hover {
+  opacity: 1;
+}
+
+.speed-slider-class::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 2vw;
+  height: 3.8vh;
+  border-radius: 50%;
+  background: #04AA6D;
+  cursor: pointer;
+}
+
+.speed-slider-class::-moz-range-thumb {
+  width: 2vw;
+  height: 3.8vh;
+  border-radius: 50%;
   width: 20px;
   height: 20px;
   border-radius: 100%;
