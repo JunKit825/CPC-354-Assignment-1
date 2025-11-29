@@ -404,8 +404,8 @@ function animUpdate() {
       case 4: // Animation 5
         scaleNum += 0.02 * speedMultiplier;
 
-        if (scaleNum >= 2.3) {
-          scaleNum = 2.3;
+        if (scaleNum >= 2.4) {
+          scaleNum = 2.4;
           currentOpIndex++;
         }
 
@@ -414,8 +414,8 @@ function animUpdate() {
       case 5: // Animation 6
         scaleNum -= 0.02 * speedMultiplier;
 
-        if (scaleNum <= 1.8) {
-          scaleNum = 1.8;
+        if (scaleNum <= 1.7) {
+          scaleNum = 1.7;
           currentOpIndex++;
         }
 
@@ -426,8 +426,8 @@ function animUpdate() {
       case 6: // Animation 7
         scaleNum += 0.02 * speedMultiplier;
 
-        if (scaleNum >= 2.2) {
-          scaleNum = 2.2;
+        if (scaleNum >= 2.1) {
+          scaleNum = 2.1;
           currentOpIndex++;
         }
 
@@ -438,8 +438,8 @@ function animUpdate() {
       case 7: // Animation 8
         scaleNum -= 0.02 * speedMultiplier;
 
-        if (scaleNum <= 1.9) {
-          scaleNum = 1.9;
+        if (scaleNum <= 1.8) {
+          scaleNum = 1.8;
           currentOpIndex++;
         }
 
@@ -450,8 +450,8 @@ function animUpdate() {
       case 8: // Animation 9
         scaleNum += 0.02 * speedMultiplier;
 
-        if (scaleNum >= 1.90) {
-          scaleNum = 1.90;
+        if (scaleNum >= 1.9) {
+          scaleNum = 1.9;
           currentOpIndex++;
         }
 
