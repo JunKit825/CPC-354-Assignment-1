@@ -1,8 +1,8 @@
 /* This code is to do control the rendering, shader conenction and the transition operation. It is the main Animation controller .js file */
 
-/*-----------------------------------------------------------------------------------*/
+//-----------------------------------------------------------------------------------/
 // Variable Declaration
-/*-----------------------------------------------------------------------------------*/
+//-----------------------------------------------------------------------------------/
 
 // Common variables
 var canvas, gl, program;
@@ -17,25 +17,32 @@ var startBtn,
   operationButton,
   selectedOperation = [],
   operationQueue = [],
-  currentOpIndex = 0;
-var theta = [0, 0, 0],
-  move = [0, 0, 0];
-var iterNum = 1,
-  scaleNum = 1;
-var iterTemp = 1,
+  currentOpIndex = 0,
+  theta = [0, 0, 0],
+  move = [0, 0, 0],
+  iterNum = 1,
+  scaleNum = 1,
+  iterTemp = 1,
   animSeq = 0,
   animFrame = 0,
-  animFlag = false;
-  delay = 100;
-var speedMultiplier = 1; // multiplier applied to per-frame increments (controlled by speed slider)
-var logo = "Logo3D.obj";
+  animFlag = false,
 
-var iterationSlider, iterationValue, depthSlider, depthValue, speedSlider, speedValue;
-
-var textSize = 2, depth = 0.1, layerNum = 30, timerID = null;
-
-// Variables for the 3D Sierpinski gasket
-var points = [],
+  // Flag to distinguish a fresh start from a pause/resume
+  isNewRun = true,
+  delay = 100,
+  speedMultiplier = 1, // multiplier applied to per-frame increments (controlled by speed slider)
+  logo = "Logo3D.obj",
+  iterationSlider,
+  iterationValue,
+  depthSlider,
+  depthValue,
+  speedSlider,
+  speedValue,
+  textSize = 2,
+  depth = 0.1,
+  layerNum = 30,
+  timerID = null,
+  points = [],
   colors = [];
 
 // Vertices for the 3D Sierpinski gasket (X-axis, Y-axis, Z-axis, W)
@@ -48,16 +55,17 @@ var baseColors = [
   vec4(0.2, 0.2, 0.5, 1.0),
 ];
 
-/*-----------------------------------------------------------------------------------*/
+//-----------------------------------------------------------------------------------
 // WebGL Utilities
-/*-----------------------------------------------------------------------------------*/
+//-----------------------------------------------------------------------------------
 
 // Execute the init() function when the web page has fully loaded
 window.onload = function init() {
   
+  // Get canvas from the html
   canvas = document.getElementById("gl-canvas");
 
-  // scale canvas width to 60% of window width and maintain 16:9 canvas ratio
+  // scale canvas width to 60% of window width and maintain 16:9 canvas ratio
   canvas.width = window.innerWidth * 0.6;
   canvas.height = canvas.width * 9 / 16; 
   
@@ -67,18 +75,21 @@ window.onload = function init() {
   // WebGL setups
   getUIElement();
 
-  // window resize listener
+  // Window resize listener
   window.addEventListener("resize", windowResize);
 
-
+  // Load the font for the logo
   initFont("Font/static/ScienceGothic_Condensed-ExtraBold.ttf");
 };
 
-// function will be called whenever there is a window resize
+// Function will be called whenever there is a window resize
 function windowResize() {
-  // scale canvas width to 60% of window width and maintain 16:9 canvas ratio
+
+  // scale canvas width to 60% of window width and maintain 16:9 canvas ratio
   canvas.width = window.innerWidth * 0.6;
+
   canvas.height = canvas.width * 9 / 16; 
+
   // update the WebGL viewport so that it matches the new canvas size
   gl.viewport(0, 0, canvas.width, canvas.height);
 
@@ -87,6 +98,7 @@ function windowResize() {
   modelViewMatrix = mat4();
   modelViewMatrix = mult(modelViewMatrix, translate(0, -0.2357, 0));
   modelViewMatrix = mult(modelViewMatrix, translate(move[0], move[1], move[2])); // we will apply translation before scaling because if scaling is applied first, it will also scale the translation values and cause the object to move too far and go out of the canvas
+  
   modelViewMatrix = mult(modelViewMatrix, scale(scaleNum, scaleNum, 1));
   modelViewMatrix = mult(modelViewMatrix, rotateY(theta[2]));
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
@@ -95,17 +107,17 @@ function windowResize() {
 
 // Retrieve all elements from HTML and store in the corresponding variables, onclick thing will put here, although not sure why
 function getUIElement() {
-  canvas = document.getElementById("gl-canvas");
 
+  // Get element from the HTML
+  canvas = document.getElementById("gl-canvas");
   startBtn = document.getElementById("start-btn");
   restartBtn = document.getElementById("restart-btn");
-
   operationButton = document.getElementById("selected-op");
 
-  // set default transitions
+  // Set default transitions
   const defaultTransitions = ["RotationR", "RotationL", "ZoomIn"];
 
-  // initialize dropdown checkboxes with default transitions
+  // Initialize dropdown checkboxes with default transitions
   document.querySelectorAll('.dropdown-content input[type="checkbox"]').forEach(box => {
 
     // If the checkbox value is in defaults, check it visually
@@ -116,24 +128,26 @@ function getUIElement() {
     // Add to selected-op if checked initially
     if (box.checked) {
       const selectedDiv = document.getElementById("selected-op");
-      // create a div for each checked operation
+
+      // Create a div for each checked operation
       const newdiv = document.createElement("div");
       newdiv.setAttribute("data-value", box.value);
       newdiv.innerText = box.value;
       selectedDiv.appendChild(newdiv);
     }
 
-    // a listener for each checkbox to update selected operation
+    // A listener for each checkbox to update selected operation
     box.addEventListener('change', () => {
+
       const selectedDiv = document.getElementById("selected-op");
 
-      // remove the item if it exists in the selected operation but the checkbox is unchecked
+      // Remove the item if it exists in the selected operation but the checkbox is unchecked
       const existingItem = selectedDiv.querySelector(`[data-value="${box.value}"]`);
       if (!box.checked && existingItem) {
         existingItem.remove();
       }
 
-      // if new operation is checked but not yet added in the existing operation, add it
+      // If new operation is checked but not yet added in the existing operation, add it
       if (box.checked && !existingItem) {
         const newdiv = document.createElement("div");
         newdiv.setAttribute("data-value", box.value);
@@ -141,7 +155,7 @@ function getUIElement() {
         selectedDiv.appendChild(newdiv);
       }
 
-      // reset animation whenever checkbox changes
+      // Reset animation whenever checkbox changes
       resetValue(); 
       recompute();
     });
@@ -149,33 +163,57 @@ function getUIElement() {
 
   // Activate when click on the start button
   startBtn.onclick = function () {
+
+    // Flip the logic for rendering or stop rendering the graphics
     animFlag = !animFlag;
 
+    // Run if animFlag is set to true, the scene will be drawn
     if (animFlag) {
-      // Get the selected operations from the div
-      //if (!selectedOperation || selectedOperation.length === 0) {
-        const selectedDiv = document.getElementById("selected-op");
-        selectedOperation = Array.from(selectedDiv.querySelectorAll("div")).map(
-          (child) => child.textContent
-        );
 
-        let checkbox = document.getElementById("option");
+      // If this is a fresh start (not a resume), reset and build the queue.
+      if (isNewRun) {
+        scaleNum = 1;
+        animSeq = 0;
+        iterTemp = 1;
+        selectedOperation = [];
+        operationQueue = [];
+        currentOpIndex = 0;
+        delay = 100;
 
-        console.log("Selected operations:", selectedOperation); // shows the actual values
+      // Get the selected operations from the div, choose the clicked one
+      const selectedDiv = document.getElementById("selected-op");
+      selectedOperation = Array.from(selectedDiv.querySelectorAll("div")).map(
+        (child) => child.textContent
+      );
+
+        // Build the operation queue for this run
         queueOperation();
-        console.log(operationQueue);
-      //}
-      disableUI()
+      }
+
+      // Disable the other UI when the animation is showing
+      disableUI();
+
+      // Start or resume the animation
       animUpdate();
+
+      // Mark that subsequent starts will be a resume until a restart/reset happens
+      isNewRun = false;
+
+    // Run if the animFlag is set to false
     } else {
+
+      // Cancel the animation frame
       window.cancelAnimationFrame(animFrame);
+
+      // Allow the UI to be clicked
       enableUI();
     }
   };
 
-  // keydown for spacebar to start or pause the animation
+  // Keydown for spacebar to start or pause the animation
   window.addEventListener("keydown", function(event) {
-    // avoid trigger it when typing in the new text logo
+
+    // Avoid trigger it when typing in the new text logo
     if (event.target.id === "userText") return;
 
     if (event.code === "Space") { // spacebar as the key to start/pause
@@ -186,16 +224,12 @@ function getUIElement() {
 
   // Activate when click on restart button
   restartBtn.onclick = function () {
-    animReset = true;
-
-    if (animReset) {
-      render();
-      // window.cancelAnimationFrame(animiFrame)
-
-      // animUpdate();
-      resetValue();
-      animReset = false;
-    }
+    render();
+    resetValue();
+    enableUI();
+    // mark next start as a fresh run
+    isNewRun = true;
+    animReset = false;
   };
 
   // Activate when iteration slider change value. and get value
@@ -340,11 +374,12 @@ function recompute() {
 function animUpdate() {
   // If no operations selected, do nothing
   if (!operationQueue || operationQueue.length === 0) {
-      window.cancelAnimationFrame(animFrame);
-      enableUI();
-      animFlag = false;
-      return; // nothing to animate
+    window.cancelAnimationFrame(animFrame);
+    enableUI();
+    animFlag = false;
+    return; // nothing to animate
   }
+  window.cancelAnimationFrame(animFrame);
 
   // Clear the color buffer and the depth buffer before rendering a new frame
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -362,6 +397,7 @@ function animUpdate() {
 
     switch (animSeq) {
       case 0: // Animation 1
+        delay = 100;
         theta[2] -= 1 * speedMultiplier;
 
         if (theta[2] <= -180) {
@@ -372,6 +408,7 @@ function animUpdate() {
         break;
 
       case 1: // Animation 2
+        delay = 100;
         theta[2] += 1 * speedMultiplier;
 
         if (theta[2] >= 0) {
@@ -382,6 +419,7 @@ function animUpdate() {
         break;
 
       case 2: // Animation 3
+        delay = 100;
         theta[2] += 1 * speedMultiplier;
 
         if (theta[2] >= 180) {
@@ -392,6 +430,7 @@ function animUpdate() {
         break;
 
       case 3: // Animation 4
+        delay = 100;
         theta[2] -= 1 * speedMultiplier;
 
         if (theta[2] <= 0) {
@@ -402,6 +441,7 @@ function animUpdate() {
         break;
 
       case 4: // Animation 5
+        delay = 100;
         scaleNum += 0.02 * speedMultiplier;
 
         if (scaleNum >= 2.4) {
@@ -412,6 +452,7 @@ function animUpdate() {
         break;
 
       case 5: // Animation 6
+        delay = 100;
         scaleNum -= 0.02 * speedMultiplier;
 
         if (scaleNum <= 1.7) {
@@ -424,6 +465,7 @@ function animUpdate() {
         break;
 
       case 6: // Animation 7
+        delay = 100;
         scaleNum += 0.02 * speedMultiplier;
 
         if (scaleNum >= 2.1) {
@@ -436,6 +478,7 @@ function animUpdate() {
         break;
 
       case 7: // Animation 8
+        delay = 100;
         scaleNum -= 0.02 * speedMultiplier;
 
         if (scaleNum <= 1.8) {
@@ -448,6 +491,7 @@ function animUpdate() {
         break;
 
       case 8: // Animation 9
+        delay = 100;
         scaleNum += 0.02 * speedMultiplier;
 
         if (scaleNum >= 1.9) {
@@ -460,6 +504,7 @@ function animUpdate() {
         break;
 
       case 9: // Animation 10
+        delay = 100;
         scaleNum -= 0.02 * speedMultiplier;
 
         if (scaleNum <= 0.5) {
@@ -470,6 +515,7 @@ function animUpdate() {
         break;
 
       case 10: // Animation 11
+        delay = 100;
         scaleNum += 0.02 * speedMultiplier;
 
         if (scaleNum >= 1.2) {
@@ -482,6 +528,7 @@ function animUpdate() {
         break;
 
       case 11: // Animation 12
+        delay = 100;
         scaleNum -= 0.02 * speedMultiplier
 
         if (scaleNum<=0.8) {
@@ -493,7 +540,8 @@ function animUpdate() {
 
         break;
 
-      case 12: // Animation 13
+      case 12: // Animation 
+        delay = 100;
         scaleNum += 0.02 * speedMultiplier;
 
         if (scaleNum >= 1.1) {
@@ -506,6 +554,7 @@ function animUpdate() {
         break;
 
       case 13: // Animation 14
+        delay = 100;
         scaleNum -= 0.02 * speedMultiplier
 
         if (scaleNum<=1) {
@@ -518,6 +567,7 @@ function animUpdate() {
         break;
 
       case 14: // Animation 15
+        delay = 100;
         move[0] += 0.0125 * speedMultiplier;
         move[1] += 0.005 * speedMultiplier;
 
@@ -529,6 +579,7 @@ function animUpdate() {
         break;
 
       case 15: // Animation 16
+        delay = 100;
         move[0] -= 0.0125 * speedMultiplier;
         move[1] -= 0.005 * speedMultiplier;
 
@@ -540,6 +591,7 @@ function animUpdate() {
         break;
 
       case 16: // Animation 17
+        delay = 100;
         move[0] -= 0.0125 * speedMultiplier;
         move[1] -= 0.005 * speedMultiplier;
 
@@ -551,6 +603,7 @@ function animUpdate() {
         break;
 
       case 17: // Animation 18
+        delay = 100;
         move[0] += 0.0125 * speedMultiplier;
         move[1] += 0.005 * speedMultiplier;
 
@@ -562,6 +615,7 @@ function animUpdate() {
         break;
 
       case 18: // Animation 19
+        delay = 100;
         move[0] -= 0.0125 * speedMultiplier;
         move[1] += 0.005 * speedMultiplier;
 
@@ -573,6 +627,7 @@ function animUpdate() {
         break;
 
       case 19: // Animation 20
+        delay = 100;
         move[0] += 0.0125 * speedMultiplier;
         move[1] -= 0.005 * speedMultiplier;
 
@@ -584,6 +639,7 @@ function animUpdate() {
         break;
 
       case 20: // Animation 21
+        delay = 100;
         move[0] += 0.0125 * speedMultiplier;
         move[1] -= 0.005 * speedMultiplier;
 
@@ -595,6 +651,7 @@ function animUpdate() {
         break;
 
       case 21: // Animation 22
+        delay = 100;
         move[0] -= 0.0125 * speedMultiplier;
         move[1] += 0.005 * speedMultiplier;
 
@@ -605,24 +662,40 @@ function animUpdate() {
         }
         break;
 
-
       default: 
-
         iterTemp++;
         resetAnimation();
         break;
     } 
-  } 
+  }
+
   else { // if animation sequence set by user is completed, let the object "move about"
     enableUI();
-    const floatDistance = 0.003; // maximum distance to move for any direction
-    const floatSpeed = 0.002; // speed of floating movement
+    window.cancelAnimationFrame(animFrame);
+    const floatDistance = 0.003;
+    const floatSpeed = 0.002;
+
+    // Floating motion
     move[0] += floatDistance * Math.sin(Date.now() * floatSpeed);
     move[1] += floatDistance * Math.cos(Date.now() * floatSpeed);
+
+    // === RECENTERING FIX ===
+    const recenterStrength = 0.02; // how strong it pulls back to zero
+    move[0] -= move[0] * recenterStrength;
+    move[1] -= move[1] * recenterStrength;
+
+    animFlag = false;
+    delay = 100;
+    // mark next start as a fresh run (animation fully finished)
+    isNewRun = true;
+}
+  
+  if (iterTemp >= iterNum) {
+    window.cancelAnimationFrame(animFrame);
   }
 
   // Perform vertex transformation
-  modelViewMatrix = mult(modelViewMatrix, translate(move[0], move[1], move[2])); // we will apply translation before scaling because if scaling is applied first, it will also scale the translation values and cause the object to move too far and go out of the canvas.
+  modelViewMatrix = mult(modelViewMatrix, translate(move[0], move[1], move[2])); // we will apply translation before scaling because if scaling is applied first, it will also scale the translation values and cause the object to move too far and go out of the canvas.
   modelViewMatrix = mult(modelViewMatrix, scale(scaleNum, scaleNum, 1));
   modelViewMatrix = mult(modelViewMatrix, rotateY(theta[2]));
 
@@ -632,7 +705,6 @@ function animUpdate() {
   // Draw the primitive / geometric shape
   gl.drawArrays(gl.TRIANGLES, 0, points.length);
 
-  console.log ("Here lei how much iterTemp", iterTemp);
   // Schedule the next frame for a looped animation (60fps)
   animFrame = window.requestAnimationFrame(animUpdate);
 }
@@ -644,7 +716,6 @@ function disableUI() {
   document.getElementById("generate-btn").classList.add("disabled");
   document.querySelector(".dropdown-btn").classList.add("disabled");
 
-  document.getElementById("restart-btn").disabled = true;
   document.querySelector(".add-transition-button").disabled = true;
   document.getElementById("selected-transition").disabled = true;
 
@@ -742,6 +813,8 @@ function resetValue() {
   operationQueue = [];
   currentOpIndex = 0;
   delay = 100;
+  // mark next start as a fresh run when resetting values
+  isNewRun = true;
 }
 
 // Reset for animation variables after one iteration
@@ -750,10 +823,10 @@ function resetAnimation() {
   move = [0, 0, 0];
   scaleNum = 1;
   currentOpIndex = 0;
-  delay = 0;
+  delay = 100;
 }
 
-// Queue operation, basically just read the operation and assign operation code (can see in function animUpdate())
+// Queue operation, basically just read the operation and assign operation code (animation will be run in animUpdate())
 function queueOperation() {
   for (const i of selectedOperation) {
     if (i == "RotationR") {
@@ -794,74 +867,77 @@ function queueOperation() {
 // To change color, maximum 3 color and if more than 3 will loop back. Delete button can control the color as well
 function getColor(event) {
 
-    let color = hex2rgb(event.target.value);
+  // Convert the format of the color
+  let color = hex2rgb(event.target.value);
 
-    // CLEAR previous data
-    if (baseColors.length >= 3) {
-      baseColors = [];
+  // CLEAR previous data if more than 3 color is chosen
+  if (baseColors.length >= 3) {
+    baseColors = [];
+    points = [];
+    colors = [];
+  }
+
+  baseColors.push(color);
+  let showColor = document.querySelector('#color-list');
+  showColor.innerHTML = ""; // clear existing items
+
+  for (let i = 0; i < baseColors.length; i++) {
+
+    // Capture the color for this iteration
+    let colorValue = rgbToHex(baseColors[i]); 
+    let vec = baseColors[i];
+    let list = document.createElement("li");
+
+    // Create color preview box
+    let colorBox = document.createElement("div");
+    colorBox.style.width = "20px";
+    colorBox.style.height = "20px";
+    colorBox.style.display = "inline-block";
+    colorBox.style.marginRight = "10px";
+    colorBox.style.border = "1px solid #000";
+    colorBox.style.backgroundColor = colorValue;
+
+    // Text label
+    let label = document.createElement("span");
+    label.textContent = colorValue;
+
+    // Append UI elements
+    list.appendChild(colorBox);
+    list.appendChild(label);
+
+    // Create delete button once a new color is added
+    let button = document.createElement("button");
+    button.className = 'delete-btn';
+    button.textContent = "Delete";
+
+    button.addEventListener("click", () => {
+      
+      // Remove from DOM
+      list.remove();
+
+      // Remove from baseColors using value, safer than using i
+      const index = baseColors.indexOf(vec);
+      if (index > -1) baseColors.splice(index, 1);
+
+      // Clear old points/colors before reloading
       points = [];
       colors = [];
-    }
 
-    baseColors.push(color);
-    let showColor = document.querySelector('#color-list');
-    showColor.innerHTML = ""; // clear existing items
+      // Reset back the color once the color is all being deleted and is empty
+      if (baseColors.length === 0) {
+        baseColors = [
+          vec4(1.0, 0.2, 0.4, 1.0),
+          vec4(0.0, 0.9, 1.0, 1.0),
+          vec4(0.2, 0.2, 0.5, 1.0),
+        ];
+      }
 
-    for (let i = 0; i < baseColors.length; i++) {
-      let colorValue = rgbToHex(baseColors[i]); // capture the color for this iteration
+      // Reload the logo with updated colors
+      loadLogo(logo);
+    });
 
-      let vec = baseColors[i];
-      let list = document.createElement("li");
-
-      // Create color preview box
-      let colorBox = document.createElement("div");
-      colorBox.style.width = "20px";
-      colorBox.style.height = "20px";
-      colorBox.style.display = "inline-block";
-      colorBox.style.marginRight = "10px";
-      colorBox.style.border = "1px solid #000";
-      colorBox.style.backgroundColor = colorValue;
-
-      // Text label
-      let label = document.createElement("span");
-      label.textContent = colorValue;
-
-      // Append UI elements
-      list.appendChild(colorBox);
-      list.appendChild(label);
-
-      let button = document.createElement("button");
-      button.className = 'delete-btn';
-      button.textContent = "Delete";
-
-      button.addEventListener("click", () => {
-        // Remove from DOM
-        list.remove();
-
-        // Remove from baseColors using value, safer than using i
-        const index = baseColors.indexOf(vec);
-        if (index > -1) baseColors.splice(index, 1);
-
-        // Clear old points/colors before reloading
-        points = [];
-        colors = [];
-
-        if (baseColors.length === 0) {
-          baseColors = [
-            vec4(1.0, 0.2, 0.4, 1.0),
-            vec4(0.0, 0.9, 1.0, 1.0),
-            vec4(0.2, 0.2, 0.5, 1.0),
-          ];
-        }
-
-        // Reload the logo with updated colors
-        loadLogo(logo);
-
-        console.log("baseColors after delete:", baseColors);
-      });
-
-      list.appendChild(button);
-      showColor.appendChild(list);
+    list.appendChild(button);
+    showColor.appendChild(list);
   }
 
   // Only call loadLogo once after creating all list items
@@ -879,7 +955,6 @@ function hex2rgb(hex) {
   const g = parseInt(hex.slice(3, 5), 16) / 255;
   const b = parseInt(hex.slice(5, 7), 16) / 255;
   
-  // return {r, g, b} 
   return vec4(r, g, b, opacity);
 }
 
@@ -897,51 +972,78 @@ function rgbToHex(vec) {
 // This replace loadLogo
 let currentFont = null;
 
-// 1. Call this once in your init() to load the font file
+// Call this once in init() to load the font file
 function initFont(fontUrl) {
-    opentype.load(fontUrl, function(err, font) {
-        if (err) {
-            console.error('Font could not be loaded: ' + err);
-        } else {
-            currentFont = font;
-            // Load default text once font is ready
-            updateTextGeometry("YSQD"); 
-        }
-    });
+
+  // Using opentype library to get get the outline of the text accoeding the font style
+  opentype.load(fontUrl, function(err, font) {
+    if (err) {
+        console.error('Font could not be loaded: ' + err);
+    } else {
+        currentFont = font;
+
+        // Load default text once font is ready
+        updateTextGeometry("YSQD"); 
+    }
+  });
 }
 
-// 2. Call this whenever the user inputs new text
-// 1. UPDATED: Helper to parse font commands into "Solid" and "Hole" data
+// Function to convert a font path (from opentype.js) into "contours"
+// A contour is basically a closed loop of points, representing a solid shape or a hole in the glyph
 function convertPathToContours(path) {
-    const contours = [];
-    let currentContour = [];
 
-    path.commands.forEach(cmd => {
-        if (cmd.type === 'M') { // Move to = start new contour
-            if (currentContour.length > 0) {
-                contours.push(currentContour);
-            }
-            currentContour = [{ x: cmd.x, y: -cmd.y }];
-        }
-        else if (cmd.type === 'L') { // Line
-            currentContour.push({ x: cmd.x, y: -cmd.y });
-        }
-        else if (cmd.type === 'Q') { // Quadratic - simplified as line
-            currentContour.push({ x: cmd.x, y: -cmd.y });
-        }
-        else if (cmd.type === 'C') { // Cubic - simplified as line
-            currentContour.push({ x: cmd.x, y: -cmd.y });
-        }
-        else if (cmd.type === 'Z') { // Close path
-            // do nothing, contour ends
-        }
-    });
+  // Array to hold all the contours found in the path
+  const contours = [];
 
-    if (currentContour.length > 0)
+  // Array to hold the points of the current contour we're building
+  let currentContour = [];
+
+  // Loop through each command in the font path
+  path.commands.forEach(cmd => {
+
+    // Starts a new contour at a specific point
+    if (cmd.type === 'M') {
+
+      // If we already have points collected in currentContour, save it as a finished contour
+      if (currentContour.length > 0) {
         contours.push(currentContour);
+      }
 
-    return contours;
+      // Start a new contour with the starting point of this 'M' command
+      // We flip the y-coordinate (-cmd.y) because font coordinates often have y going up
+      currentContour = [{ x: cmd.x, y: -cmd.y }];
+    }
+
+    // A straight line to a new point
+    else if (cmd.type === 'L') {
+      currentContour.push({ x: cmd.x, y: -cmd.y });
+    }
+
+    // Simplifying curves as straight lines to the endpoint
+    else if (cmd.type === 'Q') {
+      currentContour.push({ x: cmd.x, y: -cmd.y });
+    }
+    
+    // Simplified as a straight line to the endpoint
+    else if (cmd.type === 'C') {
+      currentContour.push({ x: cmd.x, y: -cmd.y });
+    }
+
+    // Indicates the end of the contour, no need to add points because the first point already closes it
+    else if (cmd.type === 'Z') {
+      // Nothing needed here
+    }
+  });
+
+  // After the loop, if there are points in currentContour, save it as a contour
+  if (currentContour.length > 0) {
+    contours.push(currentContour);
+  }
+
+  // Return all the contours collected from the path
+  return contours;
 }
+
 
 // keydown for the user if user finish typing new text logo
 const userInput = document.getElementById("userText");
@@ -1100,4 +1202,4 @@ function centerVertices(points) {
   }
 }
 
-/*-----------------------------------------------------------------------------------*/
+/-----------------------------------------------------------------------------------/
