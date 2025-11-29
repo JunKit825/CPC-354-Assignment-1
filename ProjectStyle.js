@@ -144,10 +144,19 @@ function addTask() {
         choice.appendChild(label);
     }
 
+    let headerRow = document.createElement("div");
+    headerRow.style.display = "flex";
+    headerRow.style.justifyContent = "space-between";
+    headerRow.style.alignItems = "center";
+
+    headerRow.className = "preset-transition-header";
+
     // Append elements
     divBox.appendChild(chosenBox);
-    divBox.appendChild(hide_show);
-    divBox.appendChild(deleteBtn);
+    divBox.appendChild(headerRow);
+
+    headerRow.appendChild(hide_show);
+    headerRow.appendChild(deleteBtn);
     divBox.appendChild(choice);
     taskList.appendChild(divBox);
 }

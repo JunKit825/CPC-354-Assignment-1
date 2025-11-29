@@ -41,13 +41,19 @@ body
   font-style: normal;
 }
 
+.start-restart-btn {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+  margin-top: auto;
+}
+
 .anim-btn
 {
 	margin: 1.39vh 0 0.46vh 0;
 	width: 14.06vw;
 	height: 6.48vh;
-	background: #34a0a4;
-	border: 0.26vw solid #99d98c;
 	border-radius: 0.52vw;
 	color: #ffffff;
 	text-align: center;
@@ -61,9 +67,25 @@ body
 	animation: bounce 1s;
 }
 
-.anim-btn:active
+#start-btn {
+	background: #34a0a4;
+	border: 0.26vw solid #99d98c;
+}
+
+#start-btn:active
 {
   background-color 	: #21ff94;
+  box-shadow 		: 0 0.19vh #666666;
+  transform 		: translateY(0.19vh);
+}
+
+#restart-btn {
+  background: #ffcc02;
+	border: 0.26vw solid #D4A017;
+}
+
+#restart-btn:active {
+  background-color 	: #ffff00e6;
   box-shadow 		: 0 0.19vh #666666;
   transform 		: translateY(0.19vh);
 }
@@ -85,9 +107,11 @@ body
 .operation-plane {
   width: 30vw;
   height: 75.67vh;
-  border: 0.52vw solid #4a4e69;
+  border: 0.1vw solid;
   border-radius: 0.52vw;
-  background-color: rgb(248, 252, 197);
+  background-color: #040e1f;
+  border-color: #B39BC8;
+  color: #F5F7FA;
 
   display: flex;
   flex-direction: column;
@@ -126,6 +150,7 @@ body
   max-height: 40vh;
 }
 
+/* Scrollbar styling for webkit browsers */
 .operation-upper::-webkit-scrollbar,
 .selected-items::-webkit-scrollbar {
   width: 8px;
@@ -184,6 +209,7 @@ body
   transform: none !important;
   background-color: #d1169f !important;
   pointer-events: none !important;
+  opacity: 0.6 !important;
 }
 
 #generate-btn:hover {
@@ -201,11 +227,9 @@ body
 
 .dropdown-content {
   display: none;
-  background-color: #f1f1f1;
   width: 100%;
   max-height: 12vh;
   overflow-y: auto;
-  border: 0.05vw solid #ddd;
 }
 .dropdown-content label {
     display: block;
@@ -215,25 +239,32 @@ body
     white-space: normal;
     word-break: break-word;
 }
-.dropdown-content label:hover {
-    background-color: #ddd;
-}
 
-.dropdown button {
+.dropdown-btn {
   width: 100%;
   height: 35px;
   border-radius: 5px;
-  border: 2px solid #4a4e69;
-  background-color: #9c9c9c;
+  border: 2px solid #4B004F;
+  background-color: #B39BC8;
   font-weight: bold;
   font-size: 1vw;
   cursor: pointer;
   color: #000;
 }
 
-.dropdown button:hover {
-  background-color: #7a7a7a;
+.dropdown-btn:hover {
+  background-color: #B39BC8;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #B39BC8;
+  transition: box-shadow 0.3s ease;
 }
+.dropdown.disabled,
+.dropdown-btn.disabled {
+  transform: none !important;
+  pointer-events: none !important;
+  opacity: 0.6 !important;
+}
+
 /*.show {
     display: block;
 }*/
@@ -248,7 +279,6 @@ body
     padding: 10px;
     border: 2px solid #4a4e69;
     border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.5);
 }
 .selected-items div {
     margin-bottom: 0.46vh;
@@ -263,17 +293,11 @@ body
   align-items: center;
   gap: 10px;
   padding: 10px 0;
-}
-
-.transition-choice {
-    width:5.21vw;
-    min-height: 20px;
-    margin-top: 5px;
-    padding: 5px;
+  max-height: 10vh;
 }
 
 .transition-choice.selected {
-	border: 2px solid blue;
+	border: 2px solid rgb(121, 121, 215);
 }
 
 .transition-choice button label{
@@ -281,17 +305,32 @@ body
 }
 
 .preset-transition {
-  background: rgb(250, 254, 133);
-  margin-top: 2px;
-  border-radius: 20px;
-  position: relative;
-  padding: 1vh 1vw;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 10px;
+  margin-left: -5px;
+  /* max-height: 20vh;         */
+  overflow-y: auto;    
+  overflow-x: hidden;     
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: auto;
+}
+
+.preset-transition-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .transition-choice {
   width: 100%;
   height: 100%;
   border-radius: 10px;
+  min-height: 20px;
+  margin-top: 5px;
+  padding: 5px;
   display: block; /* or inline-block depending on layout */
   cursor: pointer;
   border: 0.1vw solid #9c9c9c;
@@ -308,13 +347,18 @@ body
   font-weight: bold;
 }
 
+.delete-text {
+  margin-left: auto; /* pushes it to the right */
+}
+
 .add-transition-button, #selected-transition {
   width: 100%;
   max-width: 250px;
   height: 40px;
   border-radius: 5px;
-  border-color: #c9bc00;
-  background-color: #ffcb3e;
+  background-color: #B39BC8;
+  border-color: #4B004F;
+  color: #ffffff;
   text-align: center;
   font-weight: bold;
   font-size: 1.25vw;
@@ -325,13 +369,15 @@ body
 .add-transition-button.disabled,
 #selected-transition.disabled {
   transform: none !important;
-  background-color: #ffcb3e !important;
   pointer-events: none !important;
+  opacity: 0.6 !important;
 }
 
 .add-transition-button:hover, #selected-transition:hover {
   transform: scale(1.05);
-  background-color: #ffbb00;
+  background-color: #B39BC8;
+  box-shadow: 0 0 10px #B39BC8;
+  transition: box-shadow 0.3s ease;
 }
 
 .transition-list {
@@ -339,6 +385,21 @@ body
   flex-direction: column;
   gap: 10px;
   flex: 1;
+}
+
+.addTask-button label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: min(1vw, 0.95rem);
+  cursor: pointer;
+  padding: 3px 0;
+}
+
+.addTask-button input[type="checkbox"] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
 }
 
 /* Below is iteration slider css */
@@ -514,7 +575,7 @@ body
 }
 
 .delete-btn {
-  margin-left: auto;      /* push button to the right */
+  margin-left: auto;
   cursor: pointer;
   width: 60px;
   height: 25px;

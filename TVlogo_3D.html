@@ -103,11 +103,11 @@
   <div class="operation-plane">
 	<!-- UPPER SECTION: Scrollable Transition Set Manager -->
 	<div class="operation-upper">
-		<h3 style="margin: 0 0 10px 0; text-align: center;">Transition Set Manager</h3>
+		<h3 style="margin: 0 0 10px 0; text-align: center;">Animation Set Manager</h3>
 		
 		<!-- Add Transition Set button -->
 		<div class="transition-button-container">
-		  <button class="add-transition-button" onclick="addTask()">Add Transition Set</button>
+		  <button class="add-transition-button" onclick="addTask()">Add Animation</button>
 		</div>
 		
 		<!-- Container for preset transitions (scrollable) -->
@@ -117,7 +117,7 @@
 		
 		<!-- Get Selected Value button at bottom of upper section -->
 		<div class="transition-button-container" style="margin-top: auto; padding-top: 10px;">
-		  <button id="selected-transition">Get Selected Value</button>
+		  <button id="selected-transition">Apply Animation</button>
 		</div>
 	  </div>
 	
@@ -130,7 +130,7 @@
 		
 		<!-- Dropdown to manually select operations -->
 		<div class="dropdown">
-		  <button onclick="toggleDropdown()">Select Options</button>
+		  <button class="dropdown-btn" onclick="toggleDropdown()">Select Options</button>
 		  <div id="options" class="dropdown-content">
 			<label><input type="checkbox" value="RotationR"> Right Rotation</label>
 			<label><input type="checkbox" value="RotationL"> Left Rotation</label>
