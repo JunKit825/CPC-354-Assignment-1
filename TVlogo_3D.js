@@ -176,7 +176,7 @@ function getUIElement() {
   // keydown for spacebar to start or pause the animation
   window.addEventListener("keydown", function(event) {
     // avoid trigger it when typing in input fields
-    if (event.target.tagName === "INPUT" || event.target.tagName === "TEXTAREA") return;
+    if (event.target.tagName === "INPUT") return;
 
     if (event.code === "Space") {
       event.preventDefault();
