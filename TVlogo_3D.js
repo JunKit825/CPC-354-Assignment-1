@@ -175,12 +175,12 @@ function getUIElement() {
 
   // keydown for spacebar to start or pause the animation
   window.addEventListener("keydown", function(event) {
-    // avoid trigger it when typing in input fields
-    if (event.target.tagName === "INPUT") return;
+    // avoid trigger it when typing in the new text logo
+    if (event.target.id === "userText") return;
 
-    if (event.code === "Space") {
-      event.preventDefault();
-      startBtn.onclick();
+    if (event.code === "Space") { // spacebar as the key to start/pause
+      event.preventDefault(); // prevent page scrolling as it is the default behavior for spacebar
+      startBtn.onclick(); // trigger the same function as clicking the start button
     }
   });
 
@@ -615,9 +615,10 @@ function animUpdate() {
   } 
   else { // if animation sequence set by user is completed, let the object "move about"
     enableUI();
-    const floatSpeed = 0.003;
-    move[0] += floatSpeed * Math.sin(Date.now() * 0.002);
-    move[1] += floatSpeed * Math.cos(Date.now() * 0.002);
+    const floatDistance = 0.003; // maximum distance to move for any direction
+    const floatSpeed = 0.002; // speed of floating movement
+    move[0] += floatDistance * Math.sin(Date.now() * floatSpeed);
+    move[1] += floatDistance * Math.cos(Date.now() * floatSpeed);
   }
 
   // Perform vertex transformation
@@ -641,6 +642,7 @@ function disableUI() {
   document.querySelector(".add-transition-button").classList.add("disabled");
   document.getElementById("selected-transition").classList.add("disabled");
   document.getElementById("generate-btn").classList.add("disabled");
+  document.querySelector(".dropdown-btn").classList.add("disabled");
 
   document.getElementById("restart-btn").disabled = true;
   document.querySelector(".add-transition-button").disabled = true;
@@ -684,6 +686,7 @@ function enableUI() {
   document.querySelector(".add-transition-button").classList.remove("disabled");
   document.getElementById("selected-transition").classList.remove("disabled");
   document.getElementById("generate-btn").classList.remove("disabled");
+  document.querySelector(".dropdown-btn").classList.remove("disabled");
 
   document.getElementById("restart-btn").disabled = false;
   document.querySelector(".add-transition-button").disabled = false;
@@ -934,10 +937,10 @@ function convertPathToContours(path) {
     return contours;
 }
 
-// an event listener for the textbox if user press enter key after finish key in the logo text
+// keydown for the user if user finish typing new text logo
 const userInput = document.getElementById("userText");
 userInput.addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
+  if (event.key === "Enter") { // Enter as the key to generate new text logo
     loadLogo(); // load new logo text based on user input
     resetValue(); // reset animation once new input is given
     recompute(); 
