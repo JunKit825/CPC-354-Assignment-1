@@ -153,7 +153,7 @@ function getUIElement() {
 
     if (animFlag) {
       // Get the selected operations from the div
-      if (!selectedOperation || selectedOperation.length === 0) {
+      //if (!selectedOperation || selectedOperation.length === 0) {
         const selectedDiv = document.getElementById("selected-op");
         selectedOperation = Array.from(selectedDiv.querySelectorAll("div")).map(
           (child) => child.textContent
@@ -164,7 +164,7 @@ function getUIElement() {
         console.log("Selected operations:", selectedOperation); // shows the actual values
         queueOperation();
         console.log(operationQueue);
-      }
+      //}
       disableUI()
       animUpdate();
     } else {
@@ -652,6 +652,10 @@ function disableUI() {
   document.getElementById("depth-slider").disabled = true;
   document.getElementById("speed-slider").disabled = true;
 
+  document.querySelector(".iteration-slider-class").classList.add("disabled");
+  document.querySelector(".depth-slider-class").classList.add("disabled");
+  document.querySelector(".speed-slider-class").classList.add("disabled");
+
   document.getElementById("color-picker").disabled = true;
 
   document.getElementById("userText").disabled = true;
@@ -669,15 +673,14 @@ function disableUI() {
   });
 
   document.querySelectorAll('.delete-text, .hide-show-text').forEach(textBtn => { 
-    textBtn.classList.add("disabled"); 
     textBtn.style.pointerEvents = "none"; 
-    textBtn.style.opacity = "0.5";
+    textBtn.style.opacity = "0.7";
   });
 
   document.querySelectorAll('.preset-transition').forEach(box => {
     box.style.pointerEvents = "none";  
     box.style.cursor = "not-allowed";   
-    box.style.opacity = "0.5";          
+    box.style.opacity = "0.7";          
   });
 }
 
@@ -696,6 +699,10 @@ function enableUI() {
   document.getElementById("depth-slider").disabled = false;
   document.getElementById("speed-slider").disabled = false;
 
+  document.querySelector(".iteration-slider-class").classList.remove("disabled");
+  document.querySelector(".depth-slider-class").classList.remove("disabled");
+  document.querySelector(".speed-slider-class").classList.remove("disabled");
+
   document.getElementById("color-picker").disabled = false;
 
   document.getElementById("userText").disabled = false;
@@ -712,8 +719,7 @@ function enableUI() {
     btn.classList.remove("disabled");
   });
 
-  document.querySelectorAll('.delete-text, .hide-show-text').forEach(textBtn => {
-    textBtn.classList.remove("disabled");
+  document.querySelectorAll('.delete-text, .hide-show-text').forEach(textBtn => { 
     textBtn.style.pointerEvents = "auto";
     textBtn.style.opacity = "1";
   });

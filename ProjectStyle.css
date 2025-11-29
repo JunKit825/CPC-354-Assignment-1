@@ -188,7 +188,7 @@ body
   font-size: 1.2vw;
   border-radius: 10px;
   border-color: #d88cc4;
-  background-color: #d88cc4;
+  background-color: #e9a7d8;
 }
 
 #generate-btn {
@@ -197,7 +197,7 @@ body
   height: 2vw;
   border-radius: 10px;
   border-color: #8a0967;
-  background-color: #d1169f;
+  background-color: #f940c8;
   text-align: center;
 	font-weight: bold;
 	font-size: 1.2vw;
@@ -207,14 +207,16 @@ body
 
 #generate-btn.disabled {
   transform: none !important;
-  background-color: #d1169f !important;
+  background-color: #f940c8 !important;
   pointer-events: none !important;
   opacity: 0.6 !important;
 }
 
 #generate-btn:hover {
   transform: scale(1.1);
-  background-color: #ac0f82;
+  background-color: rgb(209, 46, 165);
+  box-shadow: 0 0 10px #d04aac;
+  transition: box-shadow 0.3s ease;
 }
 
 /* Below is the select current animation/operation de*/
@@ -309,7 +311,6 @@ body
   padding: 15px;
   margin-bottom: 10px;
   margin-left: -5px;
-  /* max-height: 20vh;         */
   overflow-y: auto;    
   overflow-x: hidden;     
   display: flex;
@@ -344,7 +345,6 @@ body
 .hide-show-text:hover, .delete-text:hover {
 	color: blue;
 	text-decoration: underline;
-  font-weight: bold;
 }
 
 .delete-text {
@@ -539,6 +539,7 @@ body
 
 /*Colour picker part*/
 .color-picker-container {
+  margin-top: 15px;
   margin-left: 3.15vw;
   height: 60px;
   display: flex;
@@ -607,4 +608,9 @@ body
   gap: 10px;
   justify-content: center;
   margin-top: auto;
+}
+
+.iteration-slider-class.disabled, .depth-slider-class.disabled, .speed-slider-class.disabled {
+  opacity: none !important;
+  pointer-events: none !important;
 }
