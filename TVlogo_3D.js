@@ -93,25 +93,6 @@ function onWindowResize() {
   gl.drawArrays(gl.TRIANGLES, 0, points.length);
 }
 
-
-// function to reset all the animation whenever there is any changes in the control panel
-function resetAndRecompute() {
-  if (animFlag) window.cancelAnimationFrame(animFrame);
-
-  animReset = true;
-  resetValue();  // reset all the values
-
-  // get the latest selected operations
-  const selectedDiv = document.getElementById("selected-op");
-  selectedOperation = Array.from(selectedDiv.querySelectorAll("div")).map(c => c.textContent);
-  queueOperation();
-
-  // recompute points, colors and render
-  recompute();
-
-  animReset = false;
-}
-
 // Retrieve all elements from HTML and store in the corresponding variables, onclick thing will put here, although not sure why
 function getUIElement() {
   canvas = document.getElementById("gl-canvas");
@@ -161,7 +142,8 @@ function getUIElement() {
       }
 
       // reset animation whenever checkbox changes
-      resetAndRecompute();
+      resetValue(); 
+      recompute();
     });
   });
 
@@ -224,7 +206,8 @@ function getUIElement() {
   iterationSlider.oninput = function(event) {
     iterationValue.innerHTML = event.target.value;
     iterNum = iterationValue.innerHTML;
-    resetAndRecompute();
+    resetValue(); 
+    recompute();
   }
 
   // Activate when depth slider change value and get value
@@ -235,7 +218,8 @@ function getUIElement() {
   depthSlider.oninput = function(event) {
     depthValue.innerHTML = event.target.value;
     depth = depthValue.innerHTML/10;
-    resetAndRecompute();
+    resetValue(); 
+    recompute();
   }
 
   // Activate when depth slider change value. and get value
@@ -247,14 +231,16 @@ function getUIElement() {
     speedValue.innerHTML = event.target.value;
     // Use the slider value as a multiplier for per-frame steps.
     speedMultiplier = Number(event.target.value);
-    resetAndRecompute();
+    resetValue(); 
+    recompute();
   }
 
   const colorList = document.getElementById('color-list');
 
   //create a mutation observer to see the changes of the color list
   const observer = new MutationObserver(() => { 
-    resetAndRecompute();
+    resetValue(); 
+    recompute();
   });
 
   // start to observe the changes in the color list
@@ -669,7 +655,7 @@ function disableUI() {
   document.getElementById("userText").disabled = true;
   document.getElementById("generate-btn").disabled = true;
 
-  document.querySelector(".dropdown > button").disabled = true;
+  document.querySelector(".dropdown-btn").disabled = true;
 
   document.querySelectorAll('#options input[type="checkbox"]').forEach(box => box.disabled = true);
 
@@ -712,7 +698,7 @@ function enableUI() {
   document.getElementById("userText").disabled = false;
   document.getElementById("generate-btn").disabled = false;
 
-  document.querySelector(".dropdown > button").disabled = false;
+  document.querySelector(".dropdown-btn").disabled = false;
 
   document.querySelectorAll('#options input[type="checkbox"]').forEach(box => box.disabled = false);
 
@@ -953,7 +939,8 @@ const userInput = document.getElementById("userText");
 userInput.addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
     loadLogo(); // load new logo text based on user input
-    resetAndRecompute();// reset animation once new input is given
+    resetValue(); // reset animation once new input is given
+    recompute(); 
   }
 });
 // 3. NEW HELPER: Calculates if a shape is CW or CCW (Solid or Hole)

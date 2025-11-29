@@ -82,7 +82,8 @@ document.addEventListener('DOMContentLoaded', function() {
             selectedItems.innerHTML = selectedTextarea.innerHTML;
             console.log("Fetched value:", text);
 
-            resetAndRecompute(); // reset the animation when new transition is selected
+            resetValue(); 
+            recompute(); // reset the animation when new transition is selected
         } else {
             alert("Please select a textarea first!");
         }
