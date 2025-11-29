@@ -68,14 +68,14 @@ window.onload = function init() {
   getUIElement();
 
   // window resize listener
-  window.addEventListener("resize", onWindowResize);
+  window.addEventListener("resize", windowResize);
 
 
   initFont("Font/static/ScienceGothic_Condensed-ExtraBold.ttf");
 };
 
 // function will be called whenever there is a window resize
-function onWindowResize() {
+function windowResize() {
   // scale canvas width to 60% of window width and maintain 16:9 canvas ratio
   canvas.width = window.innerWidth * 0.6;
   canvas.height = canvas.width * 9 / 16; 
@@ -659,11 +659,11 @@ function disableUI() {
 
   document.querySelector(".dropdown-btn").disabled = true;
 
-  document.querySelectorAll('#options input[type="checkbox"]').forEach(box => box.disabled = true);
+  document.querySelectorAll('#options input[type="checkbox"]').forEach(box => box.disabled = true); // to disable the checkbox in the dropdown
 
   document.querySelectorAll('.addTask-button input[type="checkbox"]').forEach(box => box.disabled = true);
 
-  document.querySelectorAll('.delete-btn').forEach(btn => {
+  document.querySelectorAll('.delete-btn').forEach(btn => { // disable delete button for the color
     btn.disabled = true;
     btn.classList.add("disabled");
   });
