@@ -958,7 +958,7 @@ let currentFont = null;
 // Call this once in init() to load the font file
 function initFont(fontUrl) {
 
-  // Using opentype library to get get the outline of the text accoeding the font style
+  // Using opentype library to get get the outline of the text according the font style
   opentype.load(fontUrl, function(err, font) {
     if (err) {
       console.error('Font could not be loaded: ' + err);
@@ -1002,12 +1002,12 @@ function convertPathToContours(path) {
       currentContour.push({ x: cmd.x, y: -cmd.y });
     }
 
-    // Simplifying curves as straight lines to the endpoint
+    // Simplifying quadratic curves as straight lines to the endpoint
     else if (cmd.type === 'Q') {
       currentContour.push({ x: cmd.x, y: -cmd.y });
     }
     
-    // Simplified as a straight line to the endpoint
+    // Simplified cubic survcs as a straight line to the endpoint
     else if (cmd.type === 'C') {
       currentContour.push({ x: cmd.x, y: -cmd.y });
     }
@@ -1059,8 +1059,11 @@ function updateTextGeometry(textString) {
     let startZ = depth / 2;
     // Safety check for layerNum
     let step = layerNum > 1 ? depth / (layerNum - 1) : 0; 
+
+    // Generate a Z values for each layer
     for (let i = 0; i < layerNum; i++) zLayers.push(startZ - (i * step));
 
+    // Get all the font paths for each character in the text string, positioned at (0, 0) with size textSize/2
     const charPaths = currentFont.getPaths(textString, 0, 0, textSize/2);
 
     charPaths.forEach(path => {
@@ -1103,14 +1106,17 @@ function updateTextGeometry(textString) {
 
         // Add the Solid
         solid.forEach(p => {
+          // Add all points from the solid shape to flatPoints
           flatPoints.push(p.x, p.y);
           currentIndex += 2;
         });
 
         // Add ALL holes (simple approach)
         holes.forEach(hole => {
+          // Record where this hole starts in the point array
           holeIndices.push(currentIndex / 2);
           hole.forEach(p => {
+            // Add the hole's points to flatPoints
             flatPoints.push(p.x, p.y);
             currentIndex += 2;
           });
@@ -1121,20 +1127,24 @@ function updateTextGeometry(textString) {
 
         // Build 3D Mesh
         for (let i = 0; i < indices.length; i += 3) {
+          // Get the three vertex indices for this triangle
           const idxA = indices[i];
           const idxB = indices[i + 1];
           const idxC = indices[i + 2];
-
+          
+          // extract x y coordinates for each vertex (*2 because each vertex has 2 coordinate x and y)
           const ax = flatPoints[idxA * 2]; const ay = flatPoints[idxA * 2 + 1];
           const bx = flatPoints[idxB * 2]; const by = flatPoints[idxB * 2 + 1];
           const cx = flatPoints[idxC * 2]; const cy = flatPoints[idxC * 2 + 1];
 
           for (let k = 0; k < layerNum; k++) {
+            // Get z depth for this layer and push the triangle into this depth
             let z = zLayers[k];
             points.push(vec4(ax, ay, z, 1.0));
             points.push(vec4(bx, by, z, 1.0));
             points.push(vec4(cx, cy, z, 1.0));
-
+            
+            // Assign colors to the three vertices by cycling through a base color palette
             for (let c = 0; c < 3; c++) {
               let colorIndex = (points.length + c) % baseColors.length;
               colors.push(baseColors[colorIndex]);
@@ -1146,7 +1156,7 @@ function updateTextGeometry(textString) {
 
     centerVertices(points);
     configWebGL();
-    render(false); 
+    render(false); //Just render once
 }
 
 // Function to take user input to generate logo
