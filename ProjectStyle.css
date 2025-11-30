@@ -233,7 +233,7 @@ body
   transition: box-shadow 0.3s ease;
 }
 
-/* Below is the select current animation/operation de*/
+/* Below is the select current animation/operation*/
 
 .dropdown {
     position: relative;
@@ -247,6 +247,7 @@ body
   max-height: 12vh;
   overflow-y: auto;
 }
+
 .dropdown-content label {
     display: block;
     padding: 0.42vh 0.52vw;
@@ -274,16 +275,13 @@ body
   box-shadow: 0 0 10px #B39BC8;
   transition: box-shadow 0.3s ease;
 }
+
 .dropdown.disabled,
 .dropdown-btn.disabled {
   transform: none !important;
   pointer-events: none !important;
   opacity: 0.6 !important;
 }
-
-/*.show {
-    display: block;
-}*/
 
 .dropdown-content.show {
 	display: block;
