@@ -1,5 +1,3 @@
-// This .js file is to store function for those non-animation related function or function that do not require get value, mainly for frontend purpose
-
 // Function to toggle the current animation selection
 function toggleDropdown() {
     document.getElementById("options").classList.toggle("show");
@@ -7,6 +5,8 @@ function toggleDropdown() {
 
 // Make sure that the selection close when click on other place
 window.onclick = function(event) {
+
+    // If the area outside of the checkbox is clicked, hide the checkbox
     if (!event.target.matches('.dropdown button') && !event.target.closest('.dropdown-content')) {
         let dropdowns = document.getElementsByClassName("dropdown-content");
         for (let i = 0; i < dropdowns.length; i++) {
@@ -16,10 +16,11 @@ window.onclick = function(event) {
             }
         }
     }
-    if (!event.target.classList.contains('transition-choice')&& 
-        !event.target.closest('.preset-transition')) {
+
+    // If the clicked area is not the pre-set transition set, cancel the selection
+    if (!event.target.classList.contains('transition-choice')&& !event.target.closest('.preset-transition')) {
         document.querySelectorAll('.transition-choice').forEach(t => t.classList.remove('selected'));
-        selectedTextarea = null; // reset selected textarea
+        selectedTextarea = null; // Reset selected textarea
     }
 }
 
@@ -27,6 +28,7 @@ window.onclick = function(event) {
 document.querySelector('.transition-list').addEventListener('change', function(event) {
     if (event.target.matches('input[type="checkbox"]')) {
         const text = event.target.value;
+        
         // Find the parent preset-transition block
         const parentBox = event.target.closest('.preset-transition');
 
@@ -34,7 +36,8 @@ document.querySelector('.transition-list').addEventListener('change', function(e
         const selectedItems = parentBox.querySelector('.transition-choice');
         const existingItem = selectedItems.querySelector(`[data-value="${text}"]`);
 
-        if (event.target.checked) { // If the box is checked
+        // If the box is checked
+        if (event.target.checked) { 
             if (!existingItem) { // and item doesn't exist, add it
                 const selectedItem = document.createElement('div'); // Create a new <div> for the checked item
                 selectedItem.setAttribute('data-value', text); // Add attribute for easy tracking
@@ -50,17 +53,19 @@ document.querySelector('.transition-list').addEventListener('change', function(e
 });
 
 
+
+let selectedTextarea = null; // Store the selected textarea
+
 // Select which preset transition when click
-let selectedTextarea = null; // store the selected textarea
 document.querySelector('.transition-list').addEventListener('click', function(event) {
     // outer wrapper to detect clicks
     let wrapper = event.target.closest('.preset-transition');
 
     if (wrapper) {
-        // remove selected from all inner boxes
+        // Remove selected from all inner boxes
         document.querySelectorAll('.transition-choice').forEach(div => div.classList.remove('selected'));
 
-        // add selected to the inner transition-choice
+        // Add selected to the inner transition-choice
         let chosen = wrapper.querySelector('.transition-choice');
         chosen.classList.add('selected');
         selectedTextarea = chosen;
@@ -68,9 +73,11 @@ document.querySelector('.transition-list').addEventListener('click', function(ev
 });
 
 // When button is clicked, fetch value to the current run animation (queue)
+// The DOMContentLoaded is added to make sure that this function is run when all of the HTML content is loaded.This make sure that the selected-op is not null and the event listener does not fail
 document.addEventListener('DOMContentLoaded', function() {
     let button = document.getElementById("selected-transition");
 
+    // When the pre-set animation is chosen and want to apply that transition
     button.addEventListener('click', function() {
         if (selectedTextarea) {
             let text = selectedTextarea;
@@ -84,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert("Please select a preset transition first!");
         }
         
+        // Below part make sure that the selection in the checkbox is in sync with the selected animation
         const checkedBoxes = document.querySelectorAll('.dropdown-content input[type="checkbox"]');
         const selectedItems = document.querySelectorAll('.selected-items > div');
 
@@ -131,6 +139,7 @@ function addTask() {
     let choice = document.createElement("div");
     choice.className = "addTask-button";
 
+    // Create checkbox, according to the labelValues[] array
     for (let i = 0; i < labelValues.length; i++) {
         let label = document.createElement("label");
         let input = document.createElement("input");
@@ -158,7 +167,7 @@ function addTask() {
     taskList.appendChild(divBox);
 }
 
-// Toggle visibility of checkboxes when clicked
+// Toggle visibility of checkboxes when clicked (hide or show the checkbox in the pre-set transition)
 document.addEventListener("click", function (event) {
     if (event.target.classList.contains("hide-show-text")) {
 
@@ -174,7 +183,8 @@ document.addEventListener("click", function (event) {
             hide_show.textContent = "Show";
         }
     }
-    // delete the preset transition box when click the delete text
+
+    // Delete the preset transition box when click the delete text
     if (event.target.classList.contains("delete-text")) {
         let divBox = event.target.closest(".preset-transition");
         divBox.remove();
