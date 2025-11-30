@@ -153,10 +153,6 @@ function getUIElement() {
         newdiv.innerText = box.value;
         selectedDiv.appendChild(newdiv);
       }
-
-      // Reset and recompute whenever checkbox changes
-      resetValue(); 
-      recompute();
     });
   });
 
