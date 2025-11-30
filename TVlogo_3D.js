@@ -1,5 +1,3 @@
-/* This code is to do control the rendering, shader conenction and the transition operation. It is the main Animation controller .js file */
-
 //-----------------------------------------------------------------------------------/
 // Variable Declaration
 //-----------------------------------------------------------------------------------/
@@ -9,9 +7,6 @@ var canvas, gl, program;
 var posBuffer, colBuffer, vPosition, vColor;
 var modelViewMatrixLoc, projectionMatrixLoc;
 var modelViewMatrix, projectionMatrix;
-
-// Variables referencing HTML elements
-// theta = [x, y, z]
 var startBtn,
   restartBtn,
   operationButton,
@@ -25,12 +20,10 @@ var startBtn,
   iterTemp = 1,
   animSeq = 0,
   animFrame = 0,
-  animFlag = false,
-
-  // Flag to distinguish a fresh start from a pause/resume
-  isNewRun = true,
+  animFlag = false, // Flag to determine run the animation or not
+  isNewRun = true, // Flag to distinguish a fresh start from a pause/resume
   delay = 100,
-  speedMultiplier = 1, // multiplier applied to per-frame increments (controlled by speed slider)
+  speedMultiplier = 1, // Multiplier applied to per-frame increments (controlled by speed slider)
   logo = "Logo3D.obj",
   iterationSlider,
   iterationValue,
@@ -45,10 +38,7 @@ var startBtn,
   points = [],
   colors = [];
 
-// Vertices for the 3D Sierpinski gasket (X-axis, Y-axis, Z-axis, W)
-// For 3D, you need to set the z-axis to create the perception of depth
-
-// Different colors for a tetrahedron (RGBA)
+// Different colors for the logo (3 colors)
 var baseColors = [
   vec4(1.0, 0.2, 0.4, 1.0),
   vec4(0.0, 0.9, 1.0, 1.0),
@@ -68,9 +58,6 @@ window.onload = function init() {
   // scale canvas width to 60% of window width and maintain 16:9 canvas ratio
   canvas.width = window.innerWidth * 0.6;
   canvas.height = canvas.width * 9 / 16; 
-  
-  // Primitive (geometric shape/logo) initialization
-  // loadLogo(logo);
 
   // WebGL setups
   getUIElement();
@@ -87,17 +74,16 @@ function windowResize() {
 
   // scale canvas width to 60% of window width and maintain 16:9 canvas ratio
   canvas.width = window.innerWidth * 0.6;
-
   canvas.height = canvas.width * 9 / 16; 
 
-  // update the WebGL viewport so that it matches the new canvas size
+  // Update the WebGL viewport so that it matches the new canvas size
   gl.viewport(0, 0, canvas.width, canvas.height);
 
-  // render current frame again to adjust it so that it fits the new canvas size
+  // Render current frame again to adjust it so that it fits the new canvas size
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   modelViewMatrix = mat4();
   modelViewMatrix = mult(modelViewMatrix, translate(0, -0.2357, 0));
-  modelViewMatrix = mult(modelViewMatrix, translate(move[0], move[1], move[2])); // we will apply translation before scaling because if scaling is applied first, it will also scale the translation values and cause the object to move too far and go out of the canvas
+  modelViewMatrix = mult(modelViewMatrix, translate(move[0], move[1], move[2])); // We will apply translation before scaling because if scaling is applied first, it will also scale the translation values and cause the object to move too far and go out of the canvas
   modelViewMatrix = mult(modelViewMatrix, scale(scaleNum, scaleNum, 1));
   modelViewMatrix = mult(modelViewMatrix, rotateY(theta[2]));
 
@@ -105,7 +91,7 @@ function windowResize() {
   gl.drawArrays(gl.TRIANGLES, 0, points.length);
 }
 
-// Retrieve all elements from HTML and store in the corresponding variables, onclick thing will put here
+// Retrieve all elements from HTML and store in the corresponding variables, onclick element will put here
 function getUIElement() {
 
   // Get element from the HTML
@@ -142,12 +128,13 @@ function getUIElement() {
 
       // Remove the item if it exists in the selected operation but the checkbox is unchecked
       const existingItem = selectedDiv.querySelector(`[data-value="${box.value}"]`);
-      if (!box.checked && existingItem) { // If the box is unchecked and the item exists in the selected operation, remove it
+      // If the box is unchecked and the item exists in the selected operation, remove it
+      if (!box.checked && existingItem) { 
         existingItem.remove();
       }
 
       // If new operation is checked but not yet added in the existing operation, add it
-      if (box.checked && !existingItem) { // If the box is checked and the item does not exist in the selected operation, add it
+      if (box.checked && !existingItem) { 
         const newdiv = document.createElement("div");
         newdiv.setAttribute("data-value", box.value);
         newdiv.innerText = box.value;
@@ -167,7 +154,9 @@ function getUIElement() {
 
       // If this is a fresh start (not a resume), reset and build the queue.
       if (isNewRun) {
-        resetValue(); // Reset variable to their default values
+        
+        // Reset variable to their default values
+        resetValue(); 
 
       // Get the selected operations from the div, choose the clicked one
       const selectedDiv = document.getElementById("selected-op");
@@ -216,6 +205,7 @@ function getUIElement() {
     render();
     resetValue();
     enableUI();
+
     // Mark next start as a fresh run
     isNewRun = true;
     animReset = false;
@@ -226,9 +216,10 @@ function getUIElement() {
   iterationValue = document.getElementById("iteration-value");
   iterationValue.innerHTML = iterationSlider.value;
 
-  iterationSlider.oninput = function(event) { // a listener for the iteration slider
-    iterationValue.innerHTML = event.target.value; // update the value shown in HTML
+  iterationSlider.oninput = function(event) { // A listener for the iteration slider
+    iterationValue.innerHTML = event.target.value; // Update the value shown in HTML
     iterNum = iterationValue.innerHTML;
+  
     // Reset and recompute whenever slider changes
     resetValue(); 
     recompute();
@@ -242,6 +233,7 @@ function getUIElement() {
   depthSlider.oninput = function(event) { // a listener for the depth slider
     depthValue.innerHTML = event.target.value;
     depth = depthValue.innerHTML/10;
+
     // Reset and recompute whenever slider changes
     resetValue(); 
     recompute();
@@ -254,6 +246,7 @@ function getUIElement() {
 
   speedSlider.oninput = function(event) { // a listener for the speed slider
     speedValue.innerHTML = event.target.value;
+
     // Use the slider value as a multiplier for per-frame steps.
     speedMultiplier = Number(event.target.value);
     // Reset and recompute whenever slider changes
@@ -263,22 +256,24 @@ function getUIElement() {
 
   const colorList = document.getElementById('color-list');
 
-  //create a mutation observer to see the changes of the color list
+  // Create a mutation observer to see the changes of the color list
   const observer = new MutationObserver(() => { 
+
     // Reset and recompute whenever color changes
     resetValue(); 
     recompute();
   });
 
-  // start to observe the changes in the color list
+  // Start to observe the changes in the color list
   observer.observe(colorList, { 
-    childList: true // observe addition or removal of the color
+    childList: true // Observe addition or removal of the color
   });
 
 }
 
 // Configure WebGL Settings
 function configWebGL() {
+
   // Initialize the WebGL context
   gl = WebGLUtils.setupWebGL(canvas);
 
@@ -330,7 +325,9 @@ function render() {
     window.cancelAnimationFrame(animFrame);
   }
 
+  // setTimeout and the delay variable control the bouncing effect when scale up and down
   setTimeout(function() {
+
     // Clear the color buffer and the depth buffer before rendering a new frame
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -353,6 +350,7 @@ function render() {
 
 // Recompute points and colors, followed by reconfiguring WebGL for rendering
 function recompute() {
+
   // Reset points and colors for render update
   points = [];
   colors = [];
@@ -364,7 +362,6 @@ function recompute() {
 
 // Update the animation frame, operation all done here
 function animUpdate() {
-  // If no operations selected, do nothing
 
   window.cancelAnimationFrame(animFrame);
 
@@ -372,18 +369,21 @@ function animUpdate() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   // Set the model view matrix for vertex transformation
-  // Use translation to readjust the position of the primitive (if needed)
+  // Use translation to readjust the position of the primitive
   modelViewMatrix = mat4();
   modelViewMatrix = mult(modelViewMatrix, translate(0, -0.2357, 0));
 
-  // Switch case to handle the ongoing animation sequence
-  // The animation is executed sequentially from case 0 to case n
-
+  // Switch case to handle the animation type
+  // The animation is executed according to the queued operations
+  // If statement to handle animation when there is any in the queue and the iteration is still in the range
   if ((currentOpIndex < operationQueue.length) || (iterTemp < iterNum)) {
+    
+    // Obtain the animation number to operate
     animSeq = operationQueue[currentOpIndex];
 
+    // Switch case to control the operation
     switch (animSeq) {
-      case 0: // Animation 1, to rotate right
+      case 0: // Animation 0, to rotate right
         delay = 100;
         theta[2] -= 1 * speedMultiplier;
 
@@ -394,9 +394,10 @@ function animUpdate() {
 
         break;
 
-      case 1: // Animation 2, back to original position
+      case 1: // Animation 1, rotate from right and back to original position
         delay = 100;
-        theta[2] += 1 * speedMultiplier;
+
+        theta[2] += 1 * speedMultiplier; // speedMultiplier applied to control the speed of the animation
 
         if (theta[2] >= 0) {
           theta[2] = 0;
@@ -405,7 +406,7 @@ function animUpdate() {
 
         break;
 
-      case 2: // Animation 3, to rotate left
+      case 2: // Animation 2, to rotate left
         delay = 100;
         theta[2] += 1 * speedMultiplier;
 
@@ -416,7 +417,7 @@ function animUpdate() {
 
         break;
 
-      case 3: // Animation 4, back to original position
+      case 3: // Animation 3, back to original position
         delay = 100;
         theta[2] -= 1 * speedMultiplier;
 
@@ -427,7 +428,7 @@ function animUpdate() {
 
         break;
 
-      case 4: // Animation 5, for bouncing zoom in effect
+      case 4: // Animation 4, for bouncing zoom in effect
         delay = 100;
         scaleNum += 0.02 * speedMultiplier;
 
@@ -438,7 +439,7 @@ function animUpdate() {
 
         break;
 
-      case 5: // Animation 6, for bouncing zoom in effect
+      case 5: // Animation 5, for bouncing zoom in effect
         delay = 100;
         scaleNum -= 0.02 * speedMultiplier;
 
@@ -451,7 +452,7 @@ function animUpdate() {
 
         break;
 
-      case 6: // Animation 7, for bouncing zoom in effect
+      case 6: // Animation 6, for bouncing zoom in effect
         delay = 100;
         scaleNum += 0.02 * speedMultiplier;
 
@@ -464,7 +465,7 @@ function animUpdate() {
 
         break;
 
-      case 7: // Animation 8, for bouncing zoom in effect
+      case 7: // Animation 7, for bouncing zoom in effect
         delay = 100;
         scaleNum -= 0.02 * speedMultiplier;
 
@@ -477,7 +478,7 @@ function animUpdate() {
 
         break;
 
-      case 8: // Animation 9, for bouncing zoom in effect
+      case 8: // Animation 8, for bouncing zoom in effect
         delay = 100;
         scaleNum += 0.02 * speedMultiplier;
 
@@ -490,7 +491,7 @@ function animUpdate() {
 
         break;
 
-      case 9: // Animation 10, for bouncing zoom out effect
+      case 9: // Animation 9, for bouncing zoom out effect
         delay = 100;
         scaleNum -= 0.02 * speedMultiplier;
 
@@ -501,7 +502,7 @@ function animUpdate() {
 
         break;
 
-      case 10: // Animation 11, for bouncing zoom out effect
+      case 10: // Animation 10, for bouncing zoom out effect
         delay = 100;
         scaleNum += 0.02 * speedMultiplier;
 
@@ -514,7 +515,7 @@ function animUpdate() {
 
         break;
 
-      case 11: // Animation 12, for bouncing zoom out effect
+      case 11: // Animation 11, for bouncing zoom out effect
         delay = 100;
         scaleNum -= 0.02 * speedMultiplier
 
@@ -527,7 +528,7 @@ function animUpdate() {
 
         break;
 
-      case 12: // Animation 13, for bouncing zoom out effect
+      case 12: // Animation 12, for bouncing zoom out effect
         delay = 100;
         scaleNum += 0.02 * speedMultiplier;
 
@@ -540,7 +541,7 @@ function animUpdate() {
 
         break;
 
-      case 13: // Animation 14, for bouncing zoom out effect
+      case 13: // Animation 13, for bouncing zoom out effect
         delay = 100;
         scaleNum -= 0.02 * speedMultiplier
 
@@ -553,7 +554,7 @@ function animUpdate() {
 
         break;
 
-      case 14: // Animation 15, move top-right
+      case 14: // Animation 14, move top-right
         delay = 100;
         move[0] += 0.0125 * speedMultiplier;
         move[1] += 0.005 * speedMultiplier;
@@ -565,7 +566,7 @@ function animUpdate() {
         }
         break;
 
-      case 15: // Animation 16, back to center
+      case 15: // Animation 15, back to center
         delay = 100;
         move[0] -= 0.0125 * speedMultiplier;
         move[1] -= 0.005 * speedMultiplier;
@@ -577,7 +578,7 @@ function animUpdate() {
         }
         break;
 
-      case 16: // Animation 17, move bottom-left
+      case 16: // Animation 16, move bottom-left
         delay = 100;
         move[0] -= 0.0125 * speedMultiplier;
         move[1] -= 0.005 * speedMultiplier;
@@ -589,7 +590,7 @@ function animUpdate() {
         }
         break;
 
-      case 17: // Animation 18, back to center
+      case 17: // Animation 17, back to center
         delay = 100;
         move[0] += 0.0125 * speedMultiplier;
         move[1] += 0.005 * speedMultiplier;
@@ -601,7 +602,7 @@ function animUpdate() {
         }
         break;
 
-      case 18: // Animation 19, move top-left
+      case 18: // Animation 18, move top-left
         delay = 100;
         move[0] -= 0.0125 * speedMultiplier;
         move[1] += 0.005 * speedMultiplier;
@@ -613,7 +614,7 @@ function animUpdate() {
         }
         break;
 
-      case 19: // Animation 20, back to center
+      case 19: // Animation 19, back to center
         delay = 100;
         move[0] += 0.0125 * speedMultiplier;
         move[1] -= 0.005 * speedMultiplier;
@@ -625,7 +626,7 @@ function animUpdate() {
         }
         break;
 
-      case 20: // Animation 21, move bottom-right
+      case 20: // Animation 20, move bottom-right
         delay = 100;
         move[0] += 0.0125 * speedMultiplier;
         move[1] -= 0.005 * speedMultiplier;
@@ -637,7 +638,7 @@ function animUpdate() {
         }
         break;
 
-      case 21: // Animation 22, back to center
+      case 21: // Animation 21, back to center
         delay = 100;
         move[0] -= 0.0125 * speedMultiplier;
         move[1] += 0.005 * speedMultiplier;
@@ -649,7 +650,7 @@ function animUpdate() {
         }
         break;
 
-      default: 
+      default: // Default case if wrong animation number is added
         iterTemp++;
         resetAnimation();
         break;
@@ -673,16 +674,18 @@ function animUpdate() {
 
     animFlag = false;
     delay = 100;
+
     // Mark next start as a fresh run (animation fully finished)
     isNewRun = true;
 }
   
+  // Added cancelAnimationFrame to prevent the graphic from moving faster and faster
   if (iterTemp >= iterNum) {
     window.cancelAnimationFrame(animFrame);
   }
 
   // Perform vertex transformation
-  modelViewMatrix = mult(modelViewMatrix, translate(move[0], move[1], move[2])); // we will apply translation before scaling because if scaling is applied first, it will also scale the translation values and cause the object to move too far and go out of the canvas
+  modelViewMatrix = mult(modelViewMatrix, translate(move[0], move[1], move[2])); // We will apply translation before scaling because if scaling is applied first, it will also scale the translation values and cause the object to move too far and go out of the canvas
   modelViewMatrix = mult(modelViewMatrix, scale(scaleNum, scaleNum, 1));
   modelViewMatrix = mult(modelViewMatrix, rotateY(theta[2]));
 
@@ -797,8 +800,7 @@ function resetValue() {
   operationQueue = [];
   currentOpIndex = 0;
   delay = 100;
-  // Mark next start as a fresh run when resetting values
-  isNewRun = true;
+  isNewRun = true; // Mark next start as a fresh run when resetting values
 }
 
 // Reset for animation variables after one iteration
@@ -825,13 +827,13 @@ function queueOperation() {
       operationQueue.push(6);
       operationQueue.push(7);
       operationQueue.push(8);
-    } else if (i == "ZoomOut") { // the reason for having multiple operation here is to create a bouncing zoom out effect
+    } else if (i == "ZoomOut") { // The reason for having multiple operation here is to create a bouncing zoom out effect
       operationQueue.push(9);
       operationQueue.push(10);
       operationQueue.push(11);
       operationQueue.push(12);
       operationQueue.push(13);
-    } else if (i == "BouncingTR") {
+    } else if (i == "BouncingTR") { // The operation is being split to multiple different case
       operationQueue.push(14);
       operationQueue.push(15);
     } else if (i == "BouncingBL") {
@@ -860,10 +862,12 @@ function getColor(event) {
     colors = [];
   }
 
+  // Push the selected color to the baseColor
   baseColors.push(color);
   let showColor = document.querySelector('#color-list');
   showColor.innerHTML = ""; // Clear existing items
 
+  // Loop available color now to show the current applied color
   for (let i = 0; i < baseColors.length; i++) {
 
     // Capture the color for this iteration
@@ -893,6 +897,7 @@ function getColor(event) {
     button.className = 'delete-btn';
     button.textContent = "Delete";
 
+    // Trigerred when the delete button is clicked
     button.addEventListener("click", () => {
       
       // Remove from DOM
@@ -932,8 +937,10 @@ function getColor(event) {
 // Convert hex color value to rgb
 function hex2rgb(hex) {
 
+  // Constant value of opacity is set
   const opacity = 1.0;
 
+  // Devide by 255 to normalize the value
   const r = parseInt(hex.slice(1, 3), 16) / 255;
   const g = parseInt(hex.slice(3, 5), 16) / 255;
   const b = parseInt(hex.slice(5, 7), 16) / 255;
