@@ -70,7 +70,7 @@ window.onload = function init() {
   canvas.height = canvas.width * 9 / 16; 
   
   // Primitive (geometric shape/logo) initialization
-  loadLogo(logo);
+  // loadLogo(logo);
 
   // WebGL setups
   getUIElement();
@@ -172,13 +172,15 @@ function getUIElement() {
 
       // If this is a fresh start (not a resume), reset and build the queue.
       if (isNewRun) {
-        scaleNum = 1;
-        animSeq = 0;
-        iterTemp = 1;
-        selectedOperation = [];
-        operationQueue = [];
-        currentOpIndex = 0;
-        delay = 100;
+        // scaleNum = 1;
+        // animSeq = 0;
+        // iterTemp = 1;
+        // selectedOperation = [];
+        // operationQueue = [];
+        // currentOpIndex = 0;
+        // delay = 100;
+
+        resetValue();
 
       // Get the selected operations from the div, choose the clicked one
       const selectedDiv = document.getElementById("selected-op");
@@ -373,12 +375,7 @@ function recompute() {
 // Update the animation frame, operation all done here
 function animUpdate() {
   // If no operations selected, do nothing
-  if (!operationQueue || operationQueue.length === 0) {
-    window.cancelAnimationFrame(animFrame);
-    enableUI();
-    animFlag = false;
-    return; // nothing to animate
-  }
+
   window.cancelAnimationFrame(animFrame);
 
   // Clear the color buffer and the depth buffer before rendering a new frame
