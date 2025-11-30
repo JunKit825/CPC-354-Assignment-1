@@ -20,7 +20,6 @@ window.onclick = function(event) {
         !event.target.closest('.preset-transition')) {
         document.querySelectorAll('.transition-choice').forEach(t => t.classList.remove('selected'));
         selectedTextarea = null; // reset selected textarea
-        console.log("Selection cancelled");
     }
 }
 
@@ -35,15 +34,15 @@ document.querySelector('.transition-list').addEventListener('change', function(e
         const selectedItems = parentBox.querySelector('.transition-choice');
         const existingItem = selectedItems.querySelector(`[data-value="${text}"]`);
 
-        if (event.target.checked) {
-            if (!existingItem) {
-                const selectedItem = document.createElement('div');
-                selectedItem.setAttribute('data-value', text);
-                selectedItem.innerText = text;
-                selectedItems.appendChild(selectedItem);
+        if (event.target.checked) { // If the box is checked
+            if (!existingItem) { // and item doesn't exist, add it
+                const selectedItem = document.createElement('div'); // Create a new <div> for the checked item
+                selectedItem.setAttribute('data-value', text); // Add attribute for easy tracking
+                selectedItem.innerText = text; // Set the text 
+                selectedItems.appendChild(selectedItem); // Add the selected item to the selected-items container
             }
-        } else {
-            if (existingItem) {
+        } else { // If the box is unchecked
+            if (existingItem) { // and item exists, remove it
                 existingItem.remove();
             }
         }
@@ -64,10 +63,7 @@ document.querySelector('.transition-list').addEventListener('click', function(ev
         // add selected to the inner transition-choice
         let chosen = wrapper.querySelector('.transition-choice');
         chosen.classList.add('selected');
-
-        // selectedTextarea = chosen.innerText.trim();
         selectedTextarea = chosen;
-        console.log("Selected div:", selectedTextarea);
     }
 });
 
@@ -80,12 +76,12 @@ document.addEventListener('DOMContentLoaded', function() {
             let text = selectedTextarea;
             let selectedItems = document.getElementById("selected-op")
             selectedItems.innerHTML = selectedTextarea.innerHTML;
-            console.log("Fetched value:", text);
 
+            // Reset and recompute when new transition is selected
             resetValue(); 
-            recompute(); // reset the animation when new transition is selected
+            recompute();
         } else {
-            alert("Please select a textarea first!");
+            alert("Please select a preset transition first!");
         }
         
         const checkedBoxes = document.querySelectorAll('.dropdown-content input[type="checkbox"]');

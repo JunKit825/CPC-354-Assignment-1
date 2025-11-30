@@ -98,14 +98,14 @@ function windowResize() {
   modelViewMatrix = mat4();
   modelViewMatrix = mult(modelViewMatrix, translate(0, -0.2357, 0));
   modelViewMatrix = mult(modelViewMatrix, translate(move[0], move[1], move[2])); // we will apply translation before scaling because if scaling is applied first, it will also scale the translation values and cause the object to move too far and go out of the canvas
-  
   modelViewMatrix = mult(modelViewMatrix, scale(scaleNum, scaleNum, 1));
   modelViewMatrix = mult(modelViewMatrix, rotateY(theta[2]));
+
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
   gl.drawArrays(gl.TRIANGLES, 0, points.length);
 }
 
-// Retrieve all elements from HTML and store in the corresponding variables, onclick thing will put here, although not sure why
+// Retrieve all elements from HTML and store in the corresponding variables, onclick thing will put here
 function getUIElement() {
 
   // Get element from the HTML
@@ -129,11 +129,10 @@ function getUIElement() {
     if (box.checked) {
       const selectedDiv = document.getElementById("selected-op");
 
-      // Create a div for each checked operation
-      const newdiv = document.createElement("div");
-      newdiv.setAttribute("data-value", box.value);
-      newdiv.innerText = box.value;
-      selectedDiv.appendChild(newdiv);
+      const newdiv = document.createElement("div"); // Create a new <div> for each checked operation
+      newdiv.setAttribute("data-value", box.value); // Add attribute "data-value" for easier tracking
+      newdiv.innerText = box.value;  // Set the text
+      selectedDiv.appendChild(newdiv); // Add the new div to selected operation
     }
 
     // A listener for each checkbox to update selected operation
@@ -143,19 +142,19 @@ function getUIElement() {
 
       // Remove the item if it exists in the selected operation but the checkbox is unchecked
       const existingItem = selectedDiv.querySelector(`[data-value="${box.value}"]`);
-      if (!box.checked && existingItem) {
+      if (!box.checked && existingItem) { // If the box is unchecked and the item exists in the selected operation, remove it
         existingItem.remove();
       }
 
       // If new operation is checked but not yet added in the existing operation, add it
-      if (box.checked && !existingItem) {
+      if (box.checked && !existingItem) { // If the box is checked and the item does not exist in the selected operation, add it
         const newdiv = document.createElement("div");
         newdiv.setAttribute("data-value", box.value);
         newdiv.innerText = box.value;
         selectedDiv.appendChild(newdiv);
       }
 
-      // Reset animation whenever checkbox changes
+      // Reset and recompute whenever checkbox changes
       resetValue(); 
       recompute();
     });
@@ -172,13 +171,7 @@ function getUIElement() {
 
       // If this is a fresh start (not a resume), reset and build the queue.
       if (isNewRun) {
-        scaleNum = 1;
-        animSeq = 0;
-        iterTemp = 1;
-        selectedOperation = [];
-        operationQueue = [];
-        currentOpIndex = 0;
-        delay = 100;
+        resetValue(); // Reset variable to their default values
 
       // Get the selected operations from the div, choose the clicked one
       const selectedDiv = document.getElementById("selected-op");
@@ -216,9 +209,9 @@ function getUIElement() {
     // Avoid trigger it when typing in the new text logo
     if (event.target.id === "userText") return;
 
-    if (event.code === "Space") { // spacebar as the key to start/pause
-      event.preventDefault(); // prevent page scrolling as it is the default behavior for spacebar
-      startBtn.onclick(); // trigger the same function as clicking the start button
+    if (event.code === "Space") { // Spacebar as the key to start/pause
+      event.preventDefault(); // Prevent page scrolling as it is the default behavior for spacebar
+      startBtn.onclick(); // Trigger the same function as clicking the start button
     }
   });
 
@@ -227,7 +220,7 @@ function getUIElement() {
     render();
     resetValue();
     enableUI();
-    // mark next start as a fresh run
+    // Mark next start as a fresh run
     isNewRun = true;
     animReset = false;
   };
@@ -237,9 +230,10 @@ function getUIElement() {
   iterationValue = document.getElementById("iteration-value");
   iterationValue.innerHTML = iterationSlider.value;
 
-  iterationSlider.oninput = function(event) {
-    iterationValue.innerHTML = event.target.value;
+  iterationSlider.oninput = function(event) { // a listener for the iteration slider
+    iterationValue.innerHTML = event.target.value; // update the value shown in HTML
     iterNum = iterationValue.innerHTML;
+    // Reset and recompute whenever slider changes
     resetValue(); 
     recompute();
   }
@@ -249,9 +243,10 @@ function getUIElement() {
   depthValue = document.getElementById("depth-value");
   depthValue.innerHTML = depthSlider.value;
 
-  depthSlider.oninput = function(event) {
+  depthSlider.oninput = function(event) { // a listener for the depth slider
     depthValue.innerHTML = event.target.value;
     depth = depthValue.innerHTML/10;
+    // Reset and recompute whenever slider changes
     resetValue(); 
     recompute();
   }
@@ -261,10 +256,11 @@ function getUIElement() {
   speedValue = document.getElementById("speed-value");
   speedValue.innerHTML = speedSlider.value;
 
-  speedSlider.oninput = function(event) {
+  speedSlider.oninput = function(event) { // a listener for the speed slider
     speedValue.innerHTML = event.target.value;
     // Use the slider value as a multiplier for per-frame steps.
     speedMultiplier = Number(event.target.value);
+    // Reset and recompute whenever slider changes
     resetValue(); 
     recompute();
   }
@@ -273,6 +269,7 @@ function getUIElement() {
 
   //create a mutation observer to see the changes of the color list
   const observer = new MutationObserver(() => { 
+    // Reset and recompute whenever color changes
     resetValue(); 
     recompute();
   });
@@ -284,7 +281,7 @@ function getUIElement() {
 
 }
 
-// Configure WebGL Settings, do not touch this!!!!! Touch at your own risk
+// Configure WebGL Settings
 function configWebGL() {
   // Initialize the WebGL context
   gl = WebGLUtils.setupWebGL(canvas);
@@ -369,7 +366,6 @@ function recompute() {
   render();
 }
 
-// Up here is the original animation
 // Update the animation frame, operation all done here
 function animUpdate() {
   // If no operations selected, do nothing
@@ -396,7 +392,7 @@ function animUpdate() {
     animSeq = operationQueue[currentOpIndex];
 
     switch (animSeq) {
-      case 0: // Animation 1
+      case 0: // Animation 1, to rotate right
         delay = 100;
         theta[2] -= 1 * speedMultiplier;
 
@@ -407,7 +403,7 @@ function animUpdate() {
 
         break;
 
-      case 1: // Animation 2
+      case 1: // Animation 2, back to original position
         delay = 100;
         theta[2] += 1 * speedMultiplier;
 
@@ -418,7 +414,7 @@ function animUpdate() {
 
         break;
 
-      case 2: // Animation 3
+      case 2: // Animation 3, to rotate left
         delay = 100;
         theta[2] += 1 * speedMultiplier;
 
@@ -429,7 +425,7 @@ function animUpdate() {
 
         break;
 
-      case 3: // Animation 4
+      case 3: // Animation 4, back to original position
         delay = 100;
         theta[2] -= 1 * speedMultiplier;
 
@@ -440,7 +436,7 @@ function animUpdate() {
 
         break;
 
-      case 4: // Animation 5
+      case 4: // Animation 5, for bouncing zoom in effect
         delay = 100;
         scaleNum += 0.02 * speedMultiplier;
 
@@ -451,7 +447,7 @@ function animUpdate() {
 
         break;
 
-      case 5: // Animation 6
+      case 5: // Animation 6, for bouncing zoom in effect
         delay = 100;
         scaleNum -= 0.02 * speedMultiplier;
 
@@ -464,7 +460,7 @@ function animUpdate() {
 
         break;
 
-      case 6: // Animation 7
+      case 6: // Animation 7, for bouncing zoom in effect
         delay = 100;
         scaleNum += 0.02 * speedMultiplier;
 
@@ -477,7 +473,7 @@ function animUpdate() {
 
         break;
 
-      case 7: // Animation 8
+      case 7: // Animation 8, for bouncing zoom in effect
         delay = 100;
         scaleNum -= 0.02 * speedMultiplier;
 
@@ -490,7 +486,7 @@ function animUpdate() {
 
         break;
 
-      case 8: // Animation 9
+      case 8: // Animation 9, for bouncing zoom in effect
         delay = 100;
         scaleNum += 0.02 * speedMultiplier;
 
@@ -503,7 +499,7 @@ function animUpdate() {
 
         break;
 
-      case 9: // Animation 10
+      case 9: // Animation 10, for bouncing zoom out effect
         delay = 100;
         scaleNum -= 0.02 * speedMultiplier;
 
@@ -514,7 +510,7 @@ function animUpdate() {
 
         break;
 
-      case 10: // Animation 11
+      case 10: // Animation 11, for bouncing zoom out effect
         delay = 100;
         scaleNum += 0.02 * speedMultiplier;
 
@@ -527,7 +523,7 @@ function animUpdate() {
 
         break;
 
-      case 11: // Animation 12
+      case 11: // Animation 12, for bouncing zoom out effect
         delay = 100;
         scaleNum -= 0.02 * speedMultiplier
 
@@ -540,7 +536,7 @@ function animUpdate() {
 
         break;
 
-      case 12: // Animation 
+      case 12: // Animation 13, for bouncing zoom out effect
         delay = 100;
         scaleNum += 0.02 * speedMultiplier;
 
@@ -553,7 +549,7 @@ function animUpdate() {
 
         break;
 
-      case 13: // Animation 14
+      case 13: // Animation 14, for bouncing zoom out effect
         delay = 100;
         scaleNum -= 0.02 * speedMultiplier
 
@@ -566,7 +562,7 @@ function animUpdate() {
 
         break;
 
-      case 14: // Animation 15
+      case 14: // Animation 15, move top-right
         delay = 100;
         move[0] += 0.0125 * speedMultiplier;
         move[1] += 0.005 * speedMultiplier;
@@ -578,7 +574,7 @@ function animUpdate() {
         }
         break;
 
-      case 15: // Animation 16
+      case 15: // Animation 16, back to center
         delay = 100;
         move[0] -= 0.0125 * speedMultiplier;
         move[1] -= 0.005 * speedMultiplier;
@@ -590,7 +586,7 @@ function animUpdate() {
         }
         break;
 
-      case 16: // Animation 17
+      case 16: // Animation 17, move bottom-left
         delay = 100;
         move[0] -= 0.0125 * speedMultiplier;
         move[1] -= 0.005 * speedMultiplier;
@@ -602,7 +598,7 @@ function animUpdate() {
         }
         break;
 
-      case 17: // Animation 18
+      case 17: // Animation 18, back to center
         delay = 100;
         move[0] += 0.0125 * speedMultiplier;
         move[1] += 0.005 * speedMultiplier;
@@ -614,7 +610,7 @@ function animUpdate() {
         }
         break;
 
-      case 18: // Animation 19
+      case 18: // Animation 19, move top-left
         delay = 100;
         move[0] -= 0.0125 * speedMultiplier;
         move[1] += 0.005 * speedMultiplier;
@@ -626,7 +622,7 @@ function animUpdate() {
         }
         break;
 
-      case 19: // Animation 20
+      case 19: // Animation 20, back to center
         delay = 100;
         move[0] += 0.0125 * speedMultiplier;
         move[1] -= 0.005 * speedMultiplier;
@@ -638,7 +634,7 @@ function animUpdate() {
         }
         break;
 
-      case 20: // Animation 21
+      case 20: // Animation 21, move bottom-right
         delay = 100;
         move[0] += 0.0125 * speedMultiplier;
         move[1] -= 0.005 * speedMultiplier;
@@ -650,7 +646,7 @@ function animUpdate() {
         }
         break;
 
-      case 21: // Animation 22
+      case 21: // Animation 22, back to center
         delay = 100;
         move[0] -= 0.0125 * speedMultiplier;
         move[1] += 0.005 * speedMultiplier;
@@ -669,7 +665,7 @@ function animUpdate() {
     } 
   }
 
-  else { // if animation sequence set by user is completed, let the object "move about"
+  else { // If animation sequence set by user is completed, let the object "move about"
     enableUI();
     window.cancelAnimationFrame(animFrame);
     const floatDistance = 0.003;
@@ -679,14 +675,14 @@ function animUpdate() {
     move[0] += floatDistance * Math.sin(Date.now() * floatSpeed);
     move[1] += floatDistance * Math.cos(Date.now() * floatSpeed);
 
-    // === RECENTERING FIX ===
-    const recenterStrength = 0.02; // how strong it pulls back to zero
+    // Recentering calculation
+    const recenterStrength = 0.02; 
     move[0] -= move[0] * recenterStrength;
     move[1] -= move[1] * recenterStrength;
 
     animFlag = false;
     delay = 100;
-    // mark next start as a fresh run (animation fully finished)
+    // Mark next start as a fresh run (animation fully finished)
     isNewRun = true;
 }
   
@@ -695,7 +691,7 @@ function animUpdate() {
   }
 
   // Perform vertex transformation
-  modelViewMatrix = mult(modelViewMatrix, translate(move[0], move[1], move[2])); // we will apply translation before scaling because if scaling is applied first, it will also scale the translation values and cause the object to move too far and go out of the canvas.
+  modelViewMatrix = mult(modelViewMatrix, translate(move[0], move[1], move[2])); // we will apply translation before scaling because if scaling is applied first, it will also scale the translation values and cause the object to move too far and go out of the canvas
   modelViewMatrix = mult(modelViewMatrix, scale(scaleNum, scaleNum, 1));
   modelViewMatrix = mult(modelViewMatrix, rotateY(theta[2]));
 
@@ -709,23 +705,23 @@ function animUpdate() {
   animFrame = window.requestAnimationFrame(animUpdate);
 }
 
-// disable all UI elements when the animation is on going
+// Disable all UI elements when the animation is on going
 function disableUI() {
-  document.querySelector(".add-transition-button").classList.add("disabled");
+  document.querySelector(".add-transition-button").classList.add("disabled"); // Add a new class to style the button when disabled
   document.getElementById("selected-transition").classList.add("disabled");
   document.getElementById("generate-btn").classList.add("disabled");
   document.querySelector(".dropdown-btn").classList.add("disabled");
 
-  document.querySelector(".add-transition-button").disabled = true;
+  document.querySelector(".add-transition-button").disabled = true; // Disable the button
   document.getElementById("selected-transition").disabled = true;
 
-  document.getElementById("iteration-slider").disabled = true;
-  document.getElementById("depth-slider").disabled = true;
-  document.getElementById("speed-slider").disabled = true;
-
-  document.querySelector(".iteration-slider-class").classList.add("disabled");
+  document.querySelector(".iteration-slider-class").classList.add("disabled"); // Add a new class to style the slider when disabled
   document.querySelector(".depth-slider-class").classList.add("disabled");
   document.querySelector(".speed-slider-class").classList.add("disabled");
+  
+  document.getElementById("iteration-slider").disabled = true; // Disable the slider
+  document.getElementById("depth-slider").disabled = true;
+  document.getElementById("speed-slider").disabled = true;
 
   document.getElementById("color-picker").disabled = true;
 
@@ -734,45 +730,43 @@ function disableUI() {
 
   document.querySelector(".dropdown-btn").disabled = true;
 
-  document.querySelectorAll('#options input[type="checkbox"]').forEach(box => box.disabled = true); // to disable the checkbox in the dropdown
+  document.querySelectorAll('#options input[type="checkbox"]').forEach(box => box.disabled = true); // Disable the checkbox in the dropdown
 
-  document.querySelectorAll('.addTask-button input[type="checkbox"]').forEach(box => box.disabled = true);
+  document.querySelectorAll('.addTask-button input[type="checkbox"]').forEach(box => box.disabled = true); // Disable the checkbox in the preset transition
 
-  document.querySelectorAll('.delete-btn').forEach(btn => { // disable delete button for the color
+  document.querySelectorAll('.delete-btn').forEach(btn => { // Disable delete button for the color
     btn.disabled = true;
     btn.classList.add("disabled");
   });
 
-  document.querySelectorAll('.delete-text, .hide-show-text').forEach(textBtn => { 
+  document.querySelectorAll('.delete-text, .hide-show-text').forEach(textBtn => { // Disable interaction delete and hide/show text button
     textBtn.style.pointerEvents = "none"; 
     textBtn.style.opacity = "0.7";
   });
 
-  document.querySelectorAll('.preset-transition').forEach(box => {
-    box.style.pointerEvents = "none";  
-    box.style.cursor = "not-allowed";   
+  document.querySelectorAll('.preset-transition').forEach(box => { // Disable interaction preset transition boxes
+    box.style.pointerEvents = "none";     
     box.style.opacity = "0.7";          
   });
 }
 
-// enable all UI elements when the animation is pause or stop
+// Enable all UI elements when the animation is pause or stop
 function enableUI() {
-  document.querySelector(".add-transition-button").classList.remove("disabled");
+  document.querySelector(".add-transition-button").classList.remove("disabled"); // Remove the disabled class
   document.getElementById("selected-transition").classList.remove("disabled");
   document.getElementById("generate-btn").classList.remove("disabled");
   document.querySelector(".dropdown-btn").classList.remove("disabled");
 
-  document.getElementById("restart-btn").disabled = false;
-  document.querySelector(".add-transition-button").disabled = false;
+  document.querySelector(".add-transition-button").disabled = false; // Enable the button
   document.getElementById("selected-transition").disabled = false;
-
-  document.getElementById("iteration-slider").disabled = false;
-  document.getElementById("depth-slider").disabled = false;
-  document.getElementById("speed-slider").disabled = false;
-
-  document.querySelector(".iteration-slider-class").classList.remove("disabled");
+  
+  document.querySelector(".iteration-slider-class").classList.remove("disabled"); // Remove the disabled class
   document.querySelector(".depth-slider-class").classList.remove("disabled");
   document.querySelector(".speed-slider-class").classList.remove("disabled");
+  
+  document.getElementById("iteration-slider").disabled = false; // Enable the slider
+  document.getElementById("depth-slider").disabled = false;
+  document.getElementById("speed-slider").disabled = false;
 
   document.getElementById("color-picker").disabled = false;
 
@@ -781,23 +775,22 @@ function enableUI() {
 
   document.querySelector(".dropdown-btn").disabled = false;
 
-  document.querySelectorAll('#options input[type="checkbox"]').forEach(box => box.disabled = false);
+  document.querySelectorAll('#options input[type="checkbox"]').forEach(box => box.disabled = false); // Enable the checkbox in the dropdown
 
-  document.querySelectorAll('.addTask-button input[type="checkbox"]').forEach(box => box.disabled = false);
+  document.querySelectorAll('.addTask-button input[type="checkbox"]').forEach(box => box.disabled = false); // Enable the checkbox in the preset transition
 
-  document.querySelectorAll('.delete-btn').forEach(btn => {
+  document.querySelectorAll('.delete-btn').forEach(btn => { // Enable delete button for the color
     btn.disabled = false;
     btn.classList.remove("disabled");
   });
 
-  document.querySelectorAll('.delete-text, .hide-show-text').forEach(textBtn => { 
+  document.querySelectorAll('.delete-text, .hide-show-text').forEach(textBtn => {  // Enable interaction delete and hide/show text button
     textBtn.style.pointerEvents = "auto";
     textBtn.style.opacity = "1";
   });
 
-  document.querySelectorAll('.preset-transition').forEach(box => {
+  document.querySelectorAll('.preset-transition').forEach(box => { // Enable interaction preset transition boxes
     box.style.pointerEvents = "auto";
-    box.style.cursor = "pointer";
     box.style.opacity = "1";
   });
 }
@@ -813,7 +806,7 @@ function resetValue() {
   operationQueue = [];
   currentOpIndex = 0;
   delay = 100;
-  // mark next start as a fresh run when resetting values
+  // Mark next start as a fresh run when resetting values
   isNewRun = true;
 }
 
@@ -835,13 +828,13 @@ function queueOperation() {
     } else if (i == "RotationL") {
       operationQueue.push(2);
       operationQueue.push(3);
-    } else if (i == "ZoomIn") {
+    } else if (i == "ZoomIn") { // the reason for having multiple operation here is to create a bouncing zoom in effect
       operationQueue.push(4);
       operationQueue.push(5);
       operationQueue.push(6);
       operationQueue.push(7);
       operationQueue.push(8);
-    } else if (i == "ZoomOut") {
+    } else if (i == "ZoomOut") { // the reason for having multiple operation here is to create a bouncing zoom out effect
       operationQueue.push(9);
       operationQueue.push(10);
       operationQueue.push(11);
@@ -853,8 +846,7 @@ function queueOperation() {
     } else if (i == "BouncingBL") {
       operationQueue.push(16);
       operationQueue.push(17);
-    }
-    else if (i == "BouncingTL") {
+    } else if (i == "BouncingTL") {
       operationQueue.push(18);
       operationQueue.push(19);
     } else if (i == "BouncingBR") {
@@ -879,7 +871,7 @@ function getColor(event) {
 
   baseColors.push(color);
   let showColor = document.querySelector('#color-list');
-  showColor.innerHTML = ""; // clear existing items
+  showColor.innerHTML = ""; // Clear existing items
 
   for (let i = 0; i < baseColors.length; i++) {
 
@@ -978,12 +970,12 @@ function initFont(fontUrl) {
   // Using opentype library to get get the outline of the text accoeding the font style
   opentype.load(fontUrl, function(err, font) {
     if (err) {
-        console.error('Font could not be loaded: ' + err);
+      console.error('Font could not be loaded: ' + err);
     } else {
-        currentFont = font;
+      currentFont = font;
 
-        // Load default text once font is ready
-        updateTextGeometry("YSQD"); 
+      // Load default text once font is ready
+      updateTextGeometry("YSQD"); 
     }
   });
 }
@@ -1045,12 +1037,12 @@ function convertPathToContours(path) {
 }
 
 
-// keydown for the user if user finish typing new text logo
+// Keydown for the user if user finish typing new text logo
 const userInput = document.getElementById("userText");
 userInput.addEventListener("keydown", function(event) {
   if (event.key === "Enter") { // Enter as the key to generate new text logo
     loadLogo(); // load new logo text based on user input
-    resetValue(); // reset animation once new input is given
+    resetValue(); // Reset and recompute once new input is given
     recompute(); 
   }
 });
@@ -1058,8 +1050,8 @@ userInput.addEventListener("keydown", function(event) {
 function getSignedArea(contour) {
     let area = 0;
     for (let i = 0; i < contour.length; i++) {
-        let j = (i + 1) % contour.length;
-        area += (contour[j].x - contour[i].x) * (contour[j].y + contour[i].y);
+      let j = (i + 1) % contour.length;
+      area += (contour[j].x - contour[i].x) * (contour[j].y + contour[i].y);
     }
     return area;
 }
@@ -1081,84 +1073,84 @@ function updateTextGeometry(textString) {
     const charPaths = currentFont.getPaths(textString, 0, 0, textSize/2);
 
     charPaths.forEach(path => {
-        const contours = convertPathToContours(path);
-        if (contours.length === 0) return;
+      const contours = convertPathToContours(path);
+      if (contours.length === 0) return;
 
-        // --- NEW HOLE LOGIC ---
-        // We separate contours into "Shapes" and "Holes" based on their Area.
-        // Usually: Solid = Negative Area (because of y-flip), Hole = Positive Area.
-        
-        // 1. Group contours by solid/hole
-        // We assume the largest contour is a Solid to establish the baseline sign.
-        let solids = [];
-        let holes = [];
-        
-        // Sort by size so we find the main body first
-        contours.sort((a, b) => Math.abs(getSignedArea(b)) - Math.abs(getSignedArea(a)));
+      // --- NEW HOLE LOGIC ---
+      // We separate contours into "Shapes" and "Holes" based on their Area.
+      // Usually: Solid = Negative Area (because of y-flip), Hole = Positive Area.
+      
+      // 1. Group contours by solid/hole
+      // We assume the largest contour is a Solid to establish the baseline sign.
+      let solids = [];
+      let holes = [];
+      
+      // Sort by size so we find the main body first
+      contours.sort((a, b) => Math.abs(getSignedArea(b)) - Math.abs(getSignedArea(a)));
 
-        // The biggest one is definitely a solid
-        let solidSign = Math.sign(getSignedArea(contours[0]));
-        
-        contours.forEach(contour => {
-            let area = getSignedArea(contour);
-            if (Math.sign(area) === solidSign) {
-                solids.push(contour);
-            } else {
-                holes.push(contour);
-            }
+      // The biggest one is definitely a solid
+      let solidSign = Math.sign(getSignedArea(contours[0]));
+      
+      contours.forEach(contour => {
+          let area = getSignedArea(contour);
+          if (Math.sign(area) === solidSign) {
+              solids.push(contour);
+          } else {
+              holes.push(contour);
+          }
+      });
+
+      // 2. Process each Solid (and apply relevant holes)
+      // Note: For simple text, we can usually dump all holes into the current solid.
+      // A robust engine would check which hole is inside which solid, 
+      // but for standard fonts, assigning all holes to the main solid works 99% of the time.
+      
+      solids.forEach(solid => {
+        let flatPoints = [];
+        let holeIndices = [];
+        let currentIndex = 0;
+
+        // Add the Solid
+        solid.forEach(p => {
+          flatPoints.push(p.x, p.y);
+          currentIndex += 2;
         });
 
-        // 2. Process each Solid (and apply relevant holes)
-        // Note: For simple text, we can usually dump all holes into the current solid.
-        // A robust engine would check which hole is inside which solid, 
-        // but for standard fonts, assigning all holes to the main solid works 99% of the time.
-        
-        solids.forEach(solid => {
-            let flatPoints = [];
-            let holeIndices = [];
-            let currentIndex = 0;
-
-            // Add the Solid
-            solid.forEach(p => {
-                flatPoints.push(p.x, p.y);
-                currentIndex += 2;
-            });
-
-            // Add ALL holes (simple approach)
-            holes.forEach(hole => {
-                holeIndices.push(currentIndex / 2);
-                hole.forEach(p => {
-                    flatPoints.push(p.x, p.y);
-                    currentIndex += 2;
-                });
-            });
-
-            // Triangulate
-            const indices = earcut(flatPoints, holeIndices);
-
-            // Build 3D Mesh
-            for (let i = 0; i < indices.length; i += 3) {
-                const idxA = indices[i];
-                const idxB = indices[i + 1];
-                const idxC = indices[i + 2];
-
-                const ax = flatPoints[idxA * 2]; const ay = flatPoints[idxA * 2 + 1];
-                const bx = flatPoints[idxB * 2]; const by = flatPoints[idxB * 2 + 1];
-                const cx = flatPoints[idxC * 2]; const cy = flatPoints[idxC * 2 + 1];
-
-                for (let k = 0; k < layerNum; k++) {
-                    let z = zLayers[k];
-                    points.push(vec4(ax, ay, z, 1.0));
-                    points.push(vec4(bx, by, z, 1.0));
-                    points.push(vec4(cx, cy, z, 1.0));
-
-                    for (let c = 0; c < 3; c++) {
-                        let colorIndex = (points.length + c) % baseColors.length;
-                        colors.push(baseColors[colorIndex]);
-                    }
-                }
-            }
+        // Add ALL holes (simple approach)
+        holes.forEach(hole => {
+          holeIndices.push(currentIndex / 2);
+          hole.forEach(p => {
+            flatPoints.push(p.x, p.y);
+            currentIndex += 2;
+          });
         });
+
+        // Triangulate
+        const indices = earcut(flatPoints, holeIndices);
+
+        // Build 3D Mesh
+        for (let i = 0; i < indices.length; i += 3) {
+          const idxA = indices[i];
+          const idxB = indices[i + 1];
+          const idxC = indices[i + 2];
+
+          const ax = flatPoints[idxA * 2]; const ay = flatPoints[idxA * 2 + 1];
+          const bx = flatPoints[idxB * 2]; const by = flatPoints[idxB * 2 + 1];
+          const cx = flatPoints[idxC * 2]; const cy = flatPoints[idxC * 2 + 1];
+
+          for (let k = 0; k < layerNum; k++) {
+            let z = zLayers[k];
+            points.push(vec4(ax, ay, z, 1.0));
+            points.push(vec4(bx, by, z, 1.0));
+            points.push(vec4(cx, cy, z, 1.0));
+
+            for (let c = 0; c < 3; c++) {
+              let colorIndex = (points.length + c) % baseColors.length;
+              colors.push(baseColors[colorIndex]);
+            }
+          }
+        }
+      });
     });
 
     centerVertices(points);
@@ -1166,11 +1158,13 @@ function updateTextGeometry(textString) {
     render(false); 
 }
 
+// Function to take user input to generate logo
 function loadLogo() {
   const text = document.getElementById('userText').value;
   updateTextGeometry(text);
 }
 
+// Function to center the vertices
 function centerVertices(points) {
   if (points.length === 0) return;
 
@@ -1201,5 +1195,3 @@ function centerVertices(points) {
     points[i][1] -= centerY;
   }
 }
-
-/-----------------------------------------------------------------------------------/
