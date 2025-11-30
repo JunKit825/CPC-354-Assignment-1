@@ -152,24 +152,28 @@ body
 
 /* Scrollbar styling for webkit browsers */
 .operation-upper::-webkit-scrollbar,
-.selected-items::-webkit-scrollbar {
+.selected-items::-webkit-scrollbar,
+.dropdown-content::-webkit-scrollbar {
   width: 8px;
 }
 
 .operation-upper::-webkit-scrollbar-track,
-.selected-items::-webkit-scrollbar-track {
+.selected-items::-webkit-scrollbar-track,
+.dropdown-content::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
 
 .operation-upper::-webkit-scrollbar-thumb,
-.selected-items::-webkit-scrollbar-thumb {
+.selected-items::-webkit-scrollbar-thumb,
+.dropdown-content::-webkit-scrollbar-thumb {
   background: #4a4e69;
   border-radius: 10px;
 }
 
 .operation-upper::-webkit-scrollbar-thumb:hover,
-.selected-items::-webkit-scrollbar-thumb:hover {
+.selected-items::-webkit-scrollbar-thumb:hover,
+.dropdown-content::-webkit-scrollbar-thumb:hover {
   background: #353849;
 }
 
