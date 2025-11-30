@@ -148,30 +148,40 @@ body
   flex-direction: column;
   gap: 10px;
   max-height: 40vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Scrollbar styling for webkit browsers */
+.operation-lower::-webkit-scrollbar,
 .operation-upper::-webkit-scrollbar,
 .selected-items::-webkit-scrollbar {
   width: 8px;
 }
 
+
+.operation-lower::-webkit-scrollbar-track,
 .operation-upper::-webkit-scrollbar-track,
 .selected-items::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
 
+.operation-lower::-webkit-scrollbar-thumb,
 .operation-upper::-webkit-scrollbar-thumb,
 .selected-items::-webkit-scrollbar-thumb {
   background: #4a4e69;
   border-radius: 10px;
 }
 
+
+.operation-lower::-webkit-scrollbar-thumb:hover,
 .operation-upper::-webkit-scrollbar-thumb:hover,
 .selected-items::-webkit-scrollbar-thumb:hover {
   background: #353849;
 }
+
+
 
 /*Input for generate logo*/
 .input-logo{
